@@ -1,4 +1,6 @@
-/* ============ MAYURI FOOTWEARS — main.js (own code) ============ */
+/* ============ MAYURI FOOTWEARS v3 — main.js (own code) ============
+   Grammar: Stacked Kinetic Deck. Commerce core carried from v2 (data list,
+   bag/wishlist in localStorage); every motion system below is new. */
 (function(){
 'use strict';
 var $  = function(s,c){ return (c||document).querySelector(s); };
@@ -10,29 +12,25 @@ var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ================= EMBLEM (own drawing: footprint + M in a ring) ================= */
-function emblemSVG(cls){
+function emblemSVG(cls, dark){
+  var ring = dark ? '#f3ede1' : '#16110b';
+  var acc  = '#ff4d12';
   return ''+
   '<svg class="'+(cls||'')+'" viewBox="0 0 200 200" role="img" aria-label="Mayuri Footwears emblem">'+
-    '<defs><linearGradient id="gld-'+cls+'" x1="0" y1="0" x2="1" y2="1">'+
-      '<stop offset="0" stop-color="#8a6420"/><stop offset=".5" stop-color="#eccf8b"/><stop offset="1" stop-color="#c9a35f"/>'+
-    '</linearGradient></defs>'+
-    '<circle class="em-ring" cx="100" cy="100" r="88" fill="none" stroke="url(#gld-'+cls+')" stroke-width="2.5"/>'+
-    '<circle class="em-ring2" cx="100" cy="100" r="79" fill="none" stroke="url(#gld-'+cls+')" stroke-width=".8" opacity=".65"/>'+
-    '<path class="em-dia" d="M100 4 L106 12 L100 20 L94 12 Z" fill="url(#gld-'+cls+')"/>'+
-    '<path class="em-dia" d="M100 180 L106 188 L100 196 L94 188 Z" fill="url(#gld-'+cls+')"/>'+
-    '<g class="em-foot" fill="none" stroke="url(#gld-'+cls+')" stroke-width="3" stroke-linejoin="round">'+
-      '<path class="em-sole" d="M100 34 C111 36 117 48 115.5 60 C114.2 71 108.5 79 100 79 C91.5 79 85.8 71 84.5 60 C83 48 89 36 100 34 Z"/>'+
-      '<circle class="em-toe" cx="82" cy="30" r="3.6"/><circle class="em-toe" cx="91.5" cy="24.5" r="4.2"/>'+
-      '<circle class="em-toe" cx="102" cy="23.5" r="4.4"/><circle class="em-toe" cx="112" cy="26" r="4"/>'+
-      '<circle class="em-toe" cx="119.5" cy="32.5" r="3.4"/>'+
+    '<circle cx="100" cy="100" r="88" fill="none" stroke="'+ring+'" stroke-width="5"/>'+
+    '<circle cx="100" cy="100" r="78" fill="none" stroke="'+acc+'" stroke-width="2" opacity=".8"/>'+
+    '<g fill="none" stroke="'+acc+'" stroke-width="5" stroke-linejoin="round">'+
+      '<path d="M100 30 C111 32 117 45 115.5 57 C114.2 68 108.5 76 100 76 C91.5 76 85.8 68 84.5 57 C83 45 89 32 100 30 Z"/>'+
+      '<circle cx="82" cy="26" r="3.6"/><circle cx="91.5" cy="20.5" r="4.2"/>'+
+      '<circle cx="102" cy="19.5" r="4.4"/><circle cx="112" cy="22" r="4"/>'+
+      '<circle cx="119.5" cy="28.5" r="3.4"/>'+
     '</g>'+
-    '<path class="em-m" d="M58 152 L58 104 L84 132 L100 110 L116 132 L142 104 L142 152" fill="none" stroke="url(#gld-'+cls+')" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>'+
+    '<path d="M58 152 L58 104 L84 132 L100 110 L116 132 L142 104 L142 152" fill="none" stroke="'+ring+'" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>'+
   '</svg>';
 }
-$('#brandEmblem').innerHTML = emblemSVG('hd');
-$('#footEmblem').innerHTML  = emblemSVG('ft');
+$('#brandEmblem').innerHTML = emblemSVG('hd', false);
+$('#footEmblem').innerHTML  = emblemSVG('ft', true);
 
-/* filled footprint glyph — the Step Cinema unit (steps, trail) */
 function footprintSVG(){
   return '<svg viewBox="0 0 60 92" aria-hidden="true"><g fill="currentColor">'+
   '<ellipse cx="15" cy="17" rx="4.6" ry="6" transform="rotate(-18 15 17)"/>'+
@@ -44,22 +42,32 @@ function footprintSVG(){
   '<ellipse cx="30" cy="79" rx="9.5" ry="10.5"/>'+
   '</g></svg>';
 }
-/* scroll progress = a trail of footprints lighting up */
-(function(){
-  var t=$('#trail'); if(!t) return;
-  for(var i=0;i<12;i++){ var s=document.createElement('span'); s.className='tstep'; s.innerHTML=footprintSVG(); s.style.color='#c9a35f'; t.appendChild(s); }
-})();
-/* the opening walk path — an S of steps rising to the wordmark */
-var WALK_STEPS=[{x:47,y:6,w:15,r:-7},{x:53,y:15,w:19,r:6},{x:45,y:25,w:24,r:-6},{x:54,y:36,w:30,r:6},{x:44,y:48,w:38,r:-5},{x:55,y:60,w:47,r:5}];
+/* opening footprints: stamp toward the viewer across a starting track */
+var WALK_STEPS=[{x:44,y:4,w:16,r:-7},{x:54,y:14,w:21,r:6},{x:43,y:25,w:27,r:-6},{x:55,y:37,w:34,r:6},{x:42,y:50,w:43,r:-5},{x:56,y:64,w:54,r:5}];
 (function(){
   var tr=$('#walkTrail'); if(!tr) return;
   WALK_STEPS.forEach(function(st,i){
     var d=document.createElement('div'); d.className='step';
     d.style.left=st.x+'%'; d.style.top=st.y+'%'; d.style.width=st.w+'px';
     d.style.transform='rotate('+st.r+'deg) scaleX('+(i%2? -1:1)+')';
-    d.style.color='#d9b96a'; d.innerHTML=footprintSVG();
+    d.innerHTML=footprintSVG();
     tr.appendChild(d);
   });
+})();
+/* side progress trail */
+(function(){
+  var t=$('#trail'); if(!t) return;
+  for(var i=0;i<12;i++){ var s=document.createElement('span'); s.className='tstep'; s.innerHTML=footprintSVG(); t.appendChild(s); }
+})();
+/* runway progress footprints */
+(function(){
+  var t=$('#rwSteps'); if(!t) return;
+  for(var i=0;i<5;i++){ var s=document.createElement('span'); s.className='rstep'; s.innerHTML=footprintSVG(); t.appendChild(s); }
+})();
+/* stride footprints */
+(function(){
+  var box=$('#strideSteps'); if(!box) return;
+  for(var i=0;i<6;i++){ var sp=document.createElement('span'); sp.className='sstep'; sp.innerHTML=footprintSVG(); sp.style.transform='rotate(90deg) scaleX('+(i%2?-1:1)+')'; box.appendChild(sp); }
 })();
 
 /* ================= STORE (localStorage) ================= */
@@ -67,8 +75,8 @@ var store = {
   get:function(k,d){ try{ var v = localStorage.getItem('mayuri.'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
   set:function(k,v){ try{ localStorage.setItem('mayuri.'+k, JSON.stringify(v)); }catch(e){} }
 };
-var bag  = store.get('bag', []);    // {id,size,color,qty}
-var wish = store.get('wish', []);   // [id]
+var bag  = store.get('bag', []);
+var wish = store.get('wish', []);
 function saveAll(){ store.set('bag',bag); store.set('wish',wish); syncBadges(); renderPops(); }
 function bagQty(){ return bag.reduce(function(a,l){ return a+l.qty; },0); }
 function bagTotal(){ return bag.reduce(function(a,l){ return a + (byId[l.id]?byId[l.id].price*l.qty:0); },0); }
@@ -97,7 +105,7 @@ function toggleWish(id){
   saveAll();
   $$('.pwish[data-id="'+id+'"]').forEach(function(b){ b.classList.toggle('on', wish.indexOf(id)>-1); b.textContent = wish.indexOf(id)>-1 ? '♥':'♡'; });
 }
-function pulse(el){ if(window.gsap) gsap.fromTo(el,{scale:1},{scale:1.18,duration:.14,yoyo:true,repeat:1,ease:'power2.out'}); }
+function pulse(el){ if(window.gsap) gsap.fromTo(el,{scale:1},{scale:1.2,duration:.14,yoyo:true,repeat:1,ease:'power2.out'}); }
 
 /* ================= POPOVERS ================= */
 function renderPops(){
@@ -142,7 +150,7 @@ function wirePop(btnId,popId){
 wirePop('#bagBtn','#bagPop'); wirePop('#wishBtn','#wishPop');
 document.addEventListener('click',function(){ $$('.pop').forEach(function(p){ p.classList.remove('open'); }); });
 
-/* ================= PRODUCT CARDS ================= */
+/* ================= PRODUCT CARDS (gallery-label schema) ================= */
 function offPct(p){ return Math.round((1-p.price/p.mrp)*100); }
 function cardHTML(p,idx){
   var dots='';
@@ -154,7 +162,7 @@ function cardHTML(p,idx){
   var tag = p.tags.indexOf('new')>-1 ? '<span class="ptag">New</span>' : (p.tags.indexOf('best')>-1 ? '<span class="ptag">Best Seller</span>':'');
   var won = wish.indexOf(p.id)>-1;
   return '<article class="pcard" data-id="'+p.id+'">'+
-    '<div class="pcard-media tilt" data-qv="'+p.id+'">'+tag+
+    '<div class="pcard-media" data-qv="'+p.id+'" data-cursor="VIEW">'+tag+
       '<button class="pwish'+(won?' on':'')+'" data-id="'+p.id+'" aria-label="Toggle wishlist">'+(won?'♥':'♡')+'</button>'+
       '<img src="'+p.img+'" alt="'+p.name+'" loading="lazy"><span class="pidx">No. '+String(idx+1).padStart(2,'0')+'</span></div>'+
     '<div class="pcard-info"><p class="pcard-cat">'+p.catLabel+'</p>'+
@@ -165,16 +173,14 @@ function cardHTML(p,idx){
       '<button class="pbtn pbtn-qv" data-qv="'+p.id+'">Quick View</button></div>'+
     '</div></article>';
 }
-function mountCards(sel,list){
-  var el=$(sel); if(!el) return;
-  el.innerHTML = list.map(function(p,i){ return cardHTML(p,i); }).join('');
-}
+function mountCards(sel,list){ var el=$(sel); if(el) el.innerHTML = list.map(function(p,i){ return cardHTML(p,i); }).join(''); }
 function mountIds(sel,ids){ mountCards(sel, ids.map(function(id){ return byId[id]; }).filter(Boolean)); }
 mountIds('#gridSchool', ['kidsflex','school']);
-mountIds('#gridOffice', ['oxford','brogue','loafer']);
+mountIds('#gridOffice', ['oxford','brogue','loafer','court']);
 mountCards('#gridCare', PRODUCTS.filter(function(p){ return p.tags.indexOf('care')>-1; }));
-mountCards('#railNew',  PRODUCTS.filter(function(p){ return p.tags.indexOf('new')>-1; }));
+mountIds('#gridRun', ['runner','court','aeroglide']);
 mountIds('#gridEvening',['goldheels','heels','sandals']);
+mountCards('#railNew',  PRODUCTS.filter(function(p){ return p.tags.indexOf('new')>-1; }));
 mountCards('#railBest', PRODUCTS.filter(function(p){ return p.tags.indexOf('best')>-1; }));
 
 document.addEventListener('click',function(e){
@@ -183,20 +189,16 @@ document.addEventListener('click',function(e){
   var w=e.target.closest('.pwish');
   if(w){ toggleWish(w.getAttribute('data-id')); return; }
   var d=e.target.closest('.dot-btn');
-  if(d){
+  if(d && !e.target.closest('#qv')){
     var card=d.closest('.pcard'); var img=card.querySelector('.pcard-media img');
     img.src=d.getAttribute('data-img');
     $$('.dot-btn',card).forEach(function(x){ x.classList.remove('sel'); }); d.classList.add('sel');
-    if(window.gsap) gsap.fromTo(img,{opacity:.35,scale:1.06},{opacity:1,scale:1,duration:.55,ease:'power2.out'});
+    if(window.gsap) gsap.fromTo(img,{opacity:.3,scale:1.07},{opacity:1,scale:1,duration:.5,ease:'power2.out'});
     return;
   }
   var q=e.target.closest('[data-qv]');
   if(q && !e.target.closest('.pwish')){ openQV(q.getAttribute('data-qv')); }
 });
-
-/* rail arrows */
-$('#railPrev').addEventListener('click',function(){ $('#railNew').scrollBy({left:-340,behavior:'smooth'}); });
-$('#railNext').addEventListener('click',function(){ $('#railNew').scrollBy({left: 340,behavior:'smooth'}); });
 
 /* ================= QUICK VIEW ================= */
 var qvP=null, qvSize=null, qvColor='';
@@ -220,7 +222,7 @@ function openQV(id){
       b.addEventListener('click',function(){
         qvColor=v.label; $('#qvImg').src=v.img;
         $$('#qvDots .dot-btn').forEach(function(x){ x.classList.remove('sel'); }); b.classList.add('sel');
-        if(window.gsap) gsap.fromTo('#qvImg',{opacity:.35},{opacity:1,duration:.5});
+        if(window.gsap) gsap.fromTo('#qvImg',{opacity:.3},{opacity:1,duration:.45});
       });
       dots.appendChild(b);
     });
@@ -249,161 +251,283 @@ $('#qvWish').addEventListener('click',function(){ if(qvP){ toggleWish(qvP.id); s
 $$('#qv [data-close]').forEach(function(el){ el.addEventListener('click',closeQV); });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeQV(); $('#mobileNav').classList.remove('open'); } });
 
-/* stride footprints under the featured shoe */
-(function(){
-  var box=$('#strideSteps'); if(!box) return;
-  for(var i=0;i<6;i++){ var sp=document.createElement('span'); sp.className='sstep'; sp.innerHTML=footprintSVG(); sp.style.transform='rotate(90deg) scaleX('+(i%2?-1:1)+')'; box.appendChild(sp); }
-})();
-
-/* ================= BRAND MARQUEE ================= */
-(function(){
-  var seq = window.MAYURI_BRANDS.map(function(b){ return '<span>'+b+'</span><b>✦</b>'; }).join('');
-  $('#brandTrack').innerHTML = '<div style="display:flex;align-items:center">'+seq+'</div><div style="display:flex;align-items:center" aria-hidden="true">'+seq+'</div>';
-})();
-
 /* ================= MOBILE NAV ================= */
 var menuBtn=$('#menuBtn'), mNav=$('#mobileNav');
 menuBtn.addEventListener('click',function(){
   var open=mNav.classList.toggle('open'); menuBtn.classList.toggle('x',open);
-  menuBtn.setAttribute('aria-expanded',open);
+  menuBtn.setAttribute('aria-expanded',String(open));
 });
 $$('#mobileNav a').forEach(function(a){ a.addEventListener('click',function(){ mNav.classList.remove('open'); menuBtn.classList.remove('x'); }); });
 
-/* ================= 3D TILT (desktop only) ================= */
-if(fine && !reduced){
-  document.addEventListener('pointermove',function(e){
-    var t=e.target.closest('.tilt'); 
-    $$('.tilt').forEach(function(el){ if(el!==t && el._tilt){ el.style.transform=''; el._tilt=false; } });
-    if(!t) return;
-    var r=t.getBoundingClientRect();
-    var x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-    t._tilt=true;
-    t.style.transform='perspective(800px) rotateY('+(x*10)+'deg) rotateX('+(-y*10)+'deg)';
-  });
-  document.addEventListener('pointerout',function(e){
-    var t=e.target.closest && e.target.closest('.tilt');
-    if(t && !t.contains(e.relatedTarget)){ t.style.transform=''; t._tilt=false; }
-  });
-}
-
-/* ================= MAGNETIC CTA (desktop only) ================= */
+/* ================= CUSTOM CURSOR (desktop only) ================= */
+var cursorAPI = { setLabel:function(){} };
 if(fine && !reduced && window.gsap){
-  $$('.magnetic').forEach(function(el){
-    el.addEventListener('pointermove',function(e){
-      var r=el.getBoundingClientRect();
-      gsap.to(el,{x:(e.clientX-r.left-r.width/2)*.28, y:(e.clientY-r.top-r.height/2)*.34, duration:.4, ease:'power3.out'});
-    });
-    el.addEventListener('pointerleave',function(){ gsap.to(el,{x:0,y:0,duration:.6,ease:'elastic.out(1,.45)'}); });
+  document.body.classList.add('has-cursor');
+  var cur=$('#cursor'), lab=$('#cursorLabel');
+  var cx=gsap.quickTo(cur,'x',{duration:.32,ease:'power3'}), cy=gsap.quickTo(cur,'y',{duration:.32,ease:'power3'});
+  var fx=gsap.quickTo(cur,'x',{duration:.08,ease:'power1'}), fy=gsap.quickTo(cur,'y',{duration:.08,ease:'power1'});
+  document.addEventListener('pointermove',function(e){ fx(e.clientX); fy(e.clientY); cx(e.clientX); cy(e.clientY); });
+  document.addEventListener('pointerover',function(e){
+    var labelled=e.target.closest ? e.target.closest('[data-cursor]') : null;
+    if(labelled){ cur.classList.add('labelled'); cur.classList.remove('grow'); lab.textContent=labelled.getAttribute('data-cursor'); return; }
+    cur.classList.remove('labelled');
+    if(e.target.closest && e.target.closest('a,button,.dot-btn,.size-btn')) cur.classList.add('grow'); else cur.classList.remove('grow');
   });
+  document.addEventListener('pointerleave',function(){ cur.classList.remove('grow','labelled'); });
 }
 
-/* ================= STEP CINEMA + SCROLL SYSTEM ================= */
+/* ================= WEBGL STAGES ================= */
+var GL = { hero:null, stride:null };
+try{ if(window.MayuriGL) GL = window.MayuriGL.init() || GL; }catch(e){}
+
+/* hero stage mouse */
+if(fine){
+  var hs=$('#glHero');
+  if(hs){
+    hs.addEventListener('pointermove',function(e){
+      var r=hs.getBoundingClientRect();
+      var x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      if(GL.hero) GL.hero.setMouse(x,-y);
+    });
+    hs.setAttribute('data-cursor','VIEW');
+  }
+}
+
+/* ================= KINETIC TYPE: char splitter ================= */
+function splitChars(el){
+  if(!el || el._split) return;
+  el._split = true;
+  var words = el.textContent.trim().split(/\s+/);
+  el.setAttribute('aria-label', el.textContent.trim());
+  el.innerHTML = words.map(function(w){
+    return '<span class="w" style="display:inline-block;white-space:nowrap" aria-hidden="true">' +
+      w.split('').map(function(c){ return '<span class="ch">'+c+'</span>'; }).join('') + '</span>';
+  }).join(' ');
+}
+$$('[data-split]').forEach(splitChars);
+
+/* ================= VELOCITY-REACTIVE MARQUEES ================= */
+var marquees = [];
+function buildMarquee(el, items){
+  var seq = items.map(function(t){ return '<span>'+t+'</span><b>✦</b>'; }).join('');
+  var track = el.querySelector('.mq-track');
+  track.innerHTML = '<div class="mq-seq">'+seq+'</div><div class="mq-seq" aria-hidden="true">'+seq+'</div>';
+  var st = { el:el, track:track, x:0, w:0, base: el.getAttribute('data-mq')==='brands' ? 0.55 : 0.9 };
+  requestAnimationFrame(function(){ st.w = track.children[0].offsetWidth || 1; });
+  marquees.push(st);
+}
+buildMarquee($('.band .mq'), ['Step into comfort','Walk in style','Step into comfort','Walk in style']);
+buildMarquee($('.mq-brands'), (window.MAYURI_BRANDS||[]).concat(window.MAYURI_BRANDS||[]));
+
+/* ================= VELOCITY HUB =================
+   One signed velocity value feeds: marquee speed, image skew/stretch,
+   WebGL surge, grade energy. Decays in the ticker. */
+var vel = { s:0, a:0, m:0 };
+function feedVelocity(v){ // px/s, signed
+  var n = Math.max(-1, Math.min(1, v/2400));
+  vel.s = n; vel.a = Math.abs(n);
+  if(Math.abs(n) > vel.m) vel.m = Math.abs(n); // marquee energy: peaks fast, drains slow
+}
+
+/* ================= SCROLL SYSTEM ================= */
 syncBadges(); renderPops();
 var seenIntro=false;
 try{ seenIntro = !!sessionStorage.getItem('mayuri.intro'); }catch(e){}
-
+function markSeen(){ try{ sessionStorage.setItem('mayuri.intro','1'); }catch(e){} }
 function finalStates(){
   document.body.classList.remove('is-loading');
   var w=$('#walk'); if(w) w.style.display='none';
-  $$('.hero-title .line').forEach(function(l){ l.style.transform='none'; });
 }
-function markSeen(){ try{ sessionStorage.setItem('mayuri.intro','1'); }catch(e){} }
 
 function initScrollFX(){
   if(!window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger);
-  /* progress + header */
+  if(window.__lenis) window.__lenis.on('scroll', function(e){ if(e && typeof e.velocity==='number') feedVelocity(e.velocity * 60); });
+
   gsap.to('#progress',{scaleX:1,ease:'none',scrollTrigger:{start:0,end:'max',scrub:.3}});
-  ScrollTrigger.create({ start:80, onToggle:function(st){ $('#header').classList.toggle('solid',st.isActive); } });
-  /* footprint trail lights as the walk progresses */
+  /* footprint trail + trail contrast on dark scenes */
   var tsteps=$$('#trail .tstep');
   ScrollTrigger.create({ start:0, end:'max', onUpdate:function(st){
     var lit=Math.round(st.progress*tsteps.length);
     tsteps.forEach(function(s,i){ s.classList.toggle('lit', i<lit); });
+    feedVelocity(st.getVelocity());
   }});
-  /* reveals */
-  $$('.reveal').forEach(function(el){
-    if(el.closest('#hero')) return;
-    gsap.fromTo(el,{y:44,opacity:0},{y:0,opacity:1,duration:1.05,ease:'power3.out',
-      scrollTrigger:{trigger:el,start:'top 86%'}});
+  ScrollTrigger.create({ trigger:'#why', start:'top 60%', end:'bottom top',
+    onToggle:function(st){ $('#trail').classList.toggle('on-dark', st.isActive); } });
+
+  /* ambient day-grade: one tint film, dawn -> noon -> gold -> dusk -> night */
+  gsap.timeline({ scrollTrigger:{ trigger:'#top', start:'top top', end:'bottom bottom', scrub:.6 } })
+    .to('#grade',{backgroundColor:'rgba(255,145,40,0.15)',duration:1,ease:'none'},0)
+    .to('#grade',{backgroundColor:'rgba(90,160,255,0.10)',duration:1,ease:'none'},1)
+    .to('#grade',{backgroundColor:'rgba(255,170,30,0.14)',duration:1,ease:'none'},2)
+    .to('#grade',{backgroundColor:'rgba(255,77,18,0.13)',duration:1,ease:'none'},3)
+    .to('#grade',{backgroundColor:'rgba(90,40,120,0.15)',duration:1,ease:'none'},4)
+    .to('#grade',{backgroundColor:'rgba(8,8,30,0.22)',duration:1,ease:'none'},5);
+
+  /* hero backdrop word drifts against the scroll */
+  gsap.fromTo('.hero-word',{xPercent:4},{xPercent:-7,ease:'none',
+    scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:.5}});
+
+  /* ---- kinetic headlines: chars rotate up, per section ---- */
+  $$('.sec-title[data-split]').forEach(function(t){
+    gsap.fromTo(t.querySelectorAll('.ch'),{rotateX:96,yPercent:55,opacity:0},
+      {rotateX:0,yPercent:0,opacity:1,duration:.8,ease:'power4.out',stagger:.022,
+       scrollTrigger:{trigger:t,start:'top 84%',toggleActions:'play none none reverse'}});
   });
-  /* room parallax */
-  $$('.room-bg .parallax').forEach(function(img){
-    gsap.fromTo(img,{yPercent:-8},{yPercent:8,ease:'none',
-      scrollTrigger:{trigger:img.closest('.room'),start:'top bottom',end:'bottom top',scrub:.7}});
+
+  /* ---- giant outlined numerals travel at their own speed ---- */
+  $$('.stop-time').forEach(function(n){
+    gsap.fromTo(n,{xPercent:9},{xPercent:-9,ease:'none',
+      scrollTrigger:{trigger:n.closest('.scard'),start:'top bottom',end:'bottom top',scrub:.6}});
   });
-  $$('.parallax-sm').forEach(function(img){
-    gsap.fromTo(img,{yPercent:-6},{yPercent:6,ease:'none',
-      scrollTrigger:{trigger:img,start:'top bottom',end:'bottom top',scrub:.8}});
-  });
-  /* THE STRIDE — pinned: scrolling scrubs one full stride (desktop; mobile shows pose one) */
-  var mm = gsap.matchMedia();
+
+  /* ---- THE DECK: each card scales down as the next covers it ---- */
+  var cards=$$('.scard');
+  cards.forEach(function(c){ gsap.set(c,{transformOrigin:'50% 0%'}); });
+  for(var i=0;i<cards.length-1;i++){
+    (function(card,next){
+      ScrollTrigger.create({ trigger:next, start:'top bottom', end:'top top+='+(76), scrub:true,
+        onUpdate:function(st){ gsap.set(card,{scale:1-.07*st.progress, filter:'brightness('+(1-.22*st.progress)+')'}); },
+        onLeaveBack:function(){ gsap.set(card,{scale:1,filter:'brightness(1)'}); } });
+    })(cards[i], cards[i+1]);
+  }
+
+  /* ---- per-stop transition signatures (no two adjacent alike) ---- */
+  var T = 'top 78%', TA='play none none reverse';
+  // SCHOOL: clip-path wipe down over the media + cards drop through a mask
+  gsap.fromTo('#school .wipe-media',{clipPath:'inset(0 0 100% 0)'},{clipPath:'inset(0 0 0% 0)',duration:1.15,ease:'power4.inOut',
+    scrollTrigger:{trigger:'#school',start:T,toggleActions:TA}});
+  gsap.fromTo('#school .wipe-media img',{scale:1.28},{scale:1,duration:1.15,ease:'power4.inOut',
+    scrollTrigger:{trigger:'#school',start:T,toggleActions:TA}});
+  gsap.fromTo('#gridSchool .pcard',{y:56,opacity:0},{y:0,opacity:1,duration:.7,ease:'power3.out',stagger:.1,
+    scrollTrigger:{trigger:'#gridSchool',start:T,toggleActions:TA}});
+  // OFFICE: split-flap clock flips + media opens through a circular mask
+  var flaps=$$('#office .flap:not(.colon)');
+  gsap.fromTo(flaps,{rotateX:-94},{rotateX:0,duration:.7,ease:'back.out(1.6)',stagger:.09,
+    scrollTrigger:{trigger:'#office',start:T,toggleActions:TA,
+      onEnter:function(){
+        flaps.forEach(function(f,i){
+          var fin=f.textContent, n=0;
+          var iv=setInterval(function(){ f.textContent = Math.floor(Math.random()*10); if(++n>5+i){ f.textContent=fin; clearInterval(iv); } },55);
+        });
+      }}});
+  gsap.fromTo('#office .mask-media',{clipPath:'circle(10% at 50% 50%)'},{clipPath:'circle(78% at 50% 50%)',ease:'none',
+    scrollTrigger:{trigger:'#office',start:'top 92%',end:'top 34%',scrub:.5}});
+  gsap.fromTo('#gridOffice .pcard',{y:56,opacity:0},{y:0,opacity:1,duration:.7,ease:'power3.out',stagger:.08,
+    scrollTrigger:{trigger:'#gridOffice',start:T,toggleActions:TA}});
+  // CARE: a volt block sweeps the card; content is uncovered behind it
+  var careCover=document.createElement('div');
+  careCover.style.cssText='position:absolute;inset:0;background:var(--volt);transform:scaleX(0);transform-origin:0 50%;z-index:5;pointer-events:none';
+  $('#care .scard-inner').appendChild(careCover);
+  var careTl=gsap.timeline({scrollTrigger:{trigger:'#care',start:'top 72%',toggleActions:TA}});
+  careTl.to(careCover,{scaleX:1,duration:.5,ease:'power4.in'})
+        .fromTo('#care .sec-head, #care .stop-split',{opacity:0},{opacity:1,duration:.1},.5)
+        .set(careCover,{transformOrigin:'100% 50%'})
+        .to(careCover,{scaleX:0,duration:.6,ease:'power4.out'},.55);
+  gsap.set('#care .sec-head, #care .stop-split',{opacity:0});
+  // RUN: lateral slide stack — cards arrive from the right, rotated, and settle
+  gsap.fromTo('#gridRun .pcard',{x:170,rotate:6,opacity:0},{x:0,rotate:0,opacity:1,duration:.85,ease:'power4.out',stagger:.11,
+    scrollTrigger:{trigger:'#gridRun',start:T,toggleActions:TA}});
+  // EVENING: 3D flip-up cards + best band slides in laterally
+  gsap.fromTo('#gridEvening .pcard',{rotateX:-72,y:70,opacity:0,transformPerspective:900},{rotateX:0,y:0,opacity:1,duration:.85,ease:'power3.out',stagger:.1,
+    scrollTrigger:{trigger:'#gridEvening',start:T,toggleActions:TA}});
+  gsap.fromTo('#evening .best-band',{x:-90,opacity:0},{x:0,opacity:1,duration:.9,ease:'power3.out',
+    scrollTrigger:{trigger:'#evening .best-band',start:'top 88%',toggleActions:TA}});
+  // SAFETY: diagonal clip wipes open with scroll (scrubbed, not timed)
+  gsap.fromTo('#safety .safety-bg',{clipPath:'polygon(0 0, 58% 0, 42% 100%, 0 100%)'},
+    {clipPath:'polygon(0 0, 100% 0, 100% 100%, 0 100%)',ease:'none',
+     scrollTrigger:{trigger:'#safety',start:'top 96%',end:'top 30%',scrub:.5}});
+  gsap.fromTo('#safety .chips span',{scale:.4,opacity:0},{scale:1,opacity:1,duration:.5,ease:'back.out(2.2)',stagger:.07,
+    scrollTrigger:{trigger:'#safety',start:T,toggleActions:TA}});
+  // CLOSE: why points slide from the left edge; visit cards counter-slide
+  gsap.fromTo('.why-point',{x:-56,opacity:0},{x:0,opacity:1,duration:.75,ease:'power3.out',stagger:.12,
+    scrollTrigger:{trigger:'#why',start:'top 72%',toggleActions:TA}});
+  gsap.fromTo('#visit .visit-card',{y:64,opacity:0},{y:0,opacity:1,duration:.8,ease:'power3.out',stagger:.14,
+    scrollTrigger:{trigger:'#visit',start:'top 78%',toggleActions:TA}});
+
+  /* velocity skew/stretch on staged images */
+  var skewEls=$$('.vskew');
+  var skewSetter = skewEls.length ? gsap.quickSetter(skewEls,'skewY','deg') : null;
+  var scaleSetter = skewEls.length ? gsap.quickSetter(skewEls,'scaleY') : null;
+
+  /* ---- THE RUNWAY: pinned horizontal (desktop), native slide (mobile) ---- */
+  var mm=gsap.matchMedia();
   mm.add('(min-width: 861px)', function(){
-    var imgs = $$('.st-img'), shoe = $('#strideShoe'), ssteps = $$('#strideSteps .sstep');
-    gsap.set(imgs,{autoAlpha:0}); gsap.set(imgs[0],{autoAlpha:1});
-    gsap.set(shoe,{xPercent:-7, rotation:-5});
-    var stTl = gsap.timeline({
-      scrollTrigger:{ trigger:'#stride', start:'top top', end:'+=160%', scrub:.55, pin:true, anticipatePin:1,
+    var track=$('#rwTrack'), view=$('.rw-view');
+    function dist(){ return Math.max(0, track.scrollWidth - view.clientWidth + window.innerWidth*0.052); }
+    var rsteps=$$('#rwSteps .rstep');
+    gsap.to(track,{x:function(){ return -dist(); },ease:'none',
+      scrollTrigger:{ trigger:'#runway', start:'top top', end:function(){ return '+='+dist(); },
+        scrub:.5, pin:true, anticipatePin:1, invalidateOnRefresh:true,
         onUpdate:function(st){
           gsap.set('#rwBar',{scaleX:st.progress});
-          var beat = Math.min(3, Math.floor(st.progress*3)+1);
-          $('#rwNow').textContent = 'Stride '+beat;
-          ssteps.forEach(function(sp,i){ sp.classList.toggle('lit', i < beat*2); });
-        } }
-    });
-    /* beat 1 -> 2: shoe swings through, next colourway lands */
-    stTl.to(shoe,{xPercent:0, rotation:2, duration:1, ease:'power1.inOut'}, 0)
-        .to(shoe,{y:-16, duration:.5, ease:'power2.out'}, .5)
-        .to(shoe,{y:0, duration:.5, ease:'power2.in'}, 1)
-        .to(imgs[0],{autoAlpha:0, duration:.3}, .85)
-        .to(imgs[1],{autoAlpha:1, duration:.3}, .85)
-    /* beat 2 -> 3 */
-        .to(shoe,{xPercent:7, rotation:-2, duration:1, ease:'power1.inOut'}, 1.6)
-        .to(shoe,{y:-16, duration:.5, ease:'power2.out'}, 2.1)
-        .to(shoe,{y:0, duration:.5, ease:'power2.in'}, 2.6)
-        .to(imgs[1],{autoAlpha:0, duration:.3}, 2.45)
-        .to(imgs[2],{autoAlpha:1, duration:.3}, 2.45)
-        .to(shoe,{xPercent:9, rotation:0, duration:.5, ease:'power2.out'}, 3.1)
-        .to({},{duration:.4});
+          var lit=Math.round(st.progress*rsteps.length);
+          rsteps.forEach(function(s,i){ s.classList.toggle('lit', i<lit); });
+        } }});
+    return function(){ gsap.set(track,{x:0}); };
+  });
+
+  /* ---- THE STRIDE: pinned WebGL dissolve (desktop), scroll-scrubbed (mobile) ---- */
+  var ssteps=$$('#strideSteps .sstep');
+  function setStride(p){
+    gsap.set('#stBar',{scaleX:p});
+    var beat=Math.min(3, Math.floor(p*3)+1);
+    $('#rwNow').textContent='Stride '+beat;
+    ssteps.forEach(function(sp,i){ sp.classList.toggle('lit', i < Math.round(p*6)); });
+    if(GL.stride && GL.stride.isLive()){ GL.stride.setMix(p*2); }
+    else {
+      var idx=Math.min(2, Math.floor(p*3));
+      $$('.st-fb').forEach(function(im,i){ im.classList.toggle('is-on', i===idx); im.style.opacity = i===idx ? 1 : 0; });
+    }
+    var stage=$('#glStride');
+    if(stage) gsap.set(stage,{y: -Math.abs(Math.sin(p*Math.PI*3))*12});
+  }
+  setStride(0);
+  mm.add('(min-width: 861px)', function(){
+    ScrollTrigger.create({ trigger:'#stride', start:'top top', end:'+=150%', scrub:.5, pin:true, anticipatePin:1,
+      onUpdate:function(st){ setStride(st.progress); } });
     return function(){};
   });
-  /* THE ROUTE — an SVG line down the page that draws itself as you walk */
-  buildRoute();
-  function buildRoute(){
-    var svg=$('#route'), path=$('#routePath'), main=$('#top');
-    if(!svg || !path || !main) return;
-    var H = main.offsetHeight; if(H<800) return;
-    svg.setAttribute('viewBox','0 0 60 '+H); svg.style.height=H+'px';
-    var d='M30 -10', y=-10, left=true;
-    while(y < H){ y+=620; d+=' C '+(left?4:56)+' '+(y-380)+', '+(left?56:4)+' '+(y-240)+', 30 '+y; left=!left; }
-    path.setAttribute('d',d);
-    var L=path.getTotalLength();
-    path.style.strokeDasharray=L; path.style.strokeDashoffset=L;
-    gsap.to(path,{strokeDashoffset:0, ease:'none',
-      scrollTrigger:{trigger:main, start:'top top', end:'bottom bottom', scrub:.4}});
-  }
+  mm.add('(max-width: 860px)', function(){
+    ScrollTrigger.create({ trigger:'#stride', start:'top bottom', end:'bottom top', scrub:.5,
+      onUpdate:function(st){ setStride(st.progress); } });
+    return function(){};
+  });
+
+  /* ---- master ticker: marquees + velocity decay + skew + GL surge ---- */
+  var last = performance.now();
+  gsap.ticker.add(function(){
+    var now=performance.now(), dt=Math.min(50, now-last); last=now;
+    var boost = 1 + vel.m * 14;
+    marquees.forEach(function(m){
+      if(!m.w) m.w = m.track.children[0] ? m.track.children[0].offsetWidth : 0;
+      if(!m.w) return;
+      m.x -= m.base * boost * (dt/16.7) * (vel.s < -0.02 ? -0.4 : 1);
+      if(m.x <= -m.w) m.x += m.w;
+      if(m.x > 0) m.x -= m.w;
+      m.track.style.transform='translate3d('+m.x+'px,0,0)';
+    });
+    if(skewSetter){
+      var sk = Math.max(-3.2, Math.min(3.2, vel.s * -3.2));
+      skewSetter(sk);
+      if(scaleSetter) scaleSetter(1 + Math.abs(vel.s)*0.035);
+    }
+    if(GL.hero) GL.hero.addVelocity(vel.a * 0.12);
+    if(GL.stride) GL.stride.addVelocity(vel.a * 0.1);
+    vel.s *= 0.90; vel.a *= 0.90; vel.m *= 0.965;
+  });
+
   addEventListener('load',function(){ ScrollTrigger.refresh(); });
 }
 
-/* hero mouse parallax + light sweep (desktop) */
-if(fine && !reduced){
-  var hero=$('#hero');
-  hero.addEventListener('pointermove',function(e){
-    var r=hero.getBoundingClientRect();
-    hero.style.setProperty('--mx', ((e.clientX-r.left)/r.width-.5).toFixed(3));
-    hero.style.setProperty('--my', ((e.clientY-r.top)/r.height-.5).toFixed(3));
-  });
-  hero.addEventListener('pointerleave',function(){ hero.style.setProperty('--mx',0); hero.style.setProperty('--my',0); });
-}
-
+/* ================= LENIS ================= */
 function initLenis(){
   if(!window.Lenis || reduced) return;
   var lenis=new Lenis({ lerp:.09, wheelMultiplier:1 });
   window.__lenis=lenis;
-  if(window.ScrollTrigger){ lenis.on('scroll',ScrollTrigger.update); }
+  if(window.ScrollTrigger) lenis.on('scroll',ScrollTrigger.update);
   function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
-  /* anchor links through lenis */
   $$('a[href^="#"]').forEach(function(a){
     a.addEventListener('click',function(e){
       var id=a.getAttribute('href');
@@ -412,49 +536,33 @@ function initLenis(){
   });
 }
 
+/* ================= OPENING: the first step (starting-line cut) ================= */
 function playWalk(){
-  if(!window.gsap || reduced || seenIntro){ finalStates(); initLenis(); initScrollFX(); return; }
-  gsap.registerPlugin(CustomEase);
-  CustomEase.create('luxIO','M0,0 C0.62,0 0.16,1 1,1');
-  CustomEase.create('luxOut','M0,0 C0.16,0.68 0.26,0.94 1,1');
-  CustomEase.create('stepPress','M0,0 C0.3,1.6 0.55,1 1,1');
-  gsap.ticker.lagSmoothing(0);
-  gsap.set('.hero-title .line',{yPercent:110});
+  if(!window.gsap || reduced || seenIntro){ finalStates(); initLenis(); initScrollFX(); heroIn(true); return; }
+  gsap.set('.hero-title .ch',{rotateX:96,yPercent:55,opacity:0});
+  gsap.set('#walk',{clipPath:'inset(0 0 0% 0)'});
   var done=false;
-  function finish(){ if(done) return; done=true; markSeen(); gsap.set('.hero-title .line, #hero .room-bg img',{clearProps:'transform'}); finalStates(); initLenis(); initScrollFX(); }
-  var tl=gsap.timeline({ defaults:{ease:'power2.out'}, onComplete:finish });
-  /* street-level darkness; pools of warm light wake up */
-  tl.to('.pool-b',{opacity:1,duration:1.2,ease:'power1.inOut'},0)
-    .to('.pool-a',{opacity:1,duration:1.4,ease:'power1.inOut'},.2)
-    .to('.walk-skip',{opacity:1,duration:.6},.9)
-  /* footprints stamp in, walking toward you — far and small, near and large */
-    .fromTo('.walk-trail .step',{opacity:0,scale:1.35},{opacity:.94,scale:1,duration:.34,ease:'stepPress',stagger:.27},.45)
-  /* the hero shoe steps into the light pool */
-    .fromTo('#walkShoe',{opacity:0,y:84,scale:.84,rotation:-6},{opacity:1,y:0,scale:1,rotation:-2,duration:.85,ease:'stepPress'},2.15)
-  /* a shoelace pulls tight */
-    .add(function(){
-       var lp=$('#lacePath'); if(!lp) return;
-       var L=lp.getTotalLength(); lp.style.strokeDasharray=L; lp.style.strokeDashoffset=L;
-       gsap.to(lp,{strokeDashoffset:0,duration:.95,ease:'power2.inOut'});
-       gsap.to('#laceKnot',{opacity:1,duration:.3,delay:.8});
-     },2.95)
-  /* the name rises — camera-feel */
-    .to('.walk-script',{opacity:1,duration:.7,ease:'luxOut'},3.35)
-    .fromTo('.walk-name',{opacity:0,y:34},{opacity:1,y:0,duration:.9,ease:'luxOut'},3.55)
-    .to('.walk-sub',{opacity:1,duration:.7},4.0)
-  /* rise into the hero */
-    .to('#walk',{yPercent:-100,duration:1.05,ease:'luxIO'},4.75)
-    .fromTo('#hero .room-bg img',{scale:1.12},{scale:1.04,duration:1.6,ease:'power2.out'},4.75)
-    .to('.hero-title .line',{yPercent:0,duration:1.1,ease:'luxOut',stagger:.12},5.15)
-    .fromTo('#hero .script, #hero .hero-sub, #hero .hero-ctas, #hero .hero-meta',{y:36,opacity:0},{y:0,opacity:1,duration:.9,ease:'luxOut',stagger:.1},5.4);
-  /* tap to skip */
+  function finish(){ if(done) return; done=true; markSeen(); finalStates(); initLenis(); initScrollFX(); }
+  var tl=gsap.timeline({ defaults:{ease:'power3.out'}, onComplete:finish });
+  tl.fromTo('.walk-track .step',{opacity:0,scale:1.5},{opacity:.95,scale:1,duration:.32,ease:'power4.in',stagger:.24},.3)
+    .fromTo('#walkShoe',{opacity:0,y:96,rotate:-9,scale:.85},{opacity:1,y:0,rotate:-2.5,scale:1,duration:.8,ease:'back.out(1.4)'},1.9)
+    .to('.walk-kicker',{opacity:1,duration:.5},2.5)
+    .fromTo('.walk-name',{opacity:0,scale:1.3,y:26},{opacity:1,scale:1,y:0,duration:.7,ease:'power4.out'},2.65)
+    .to('.walk-sub',{opacity:1,duration:.5},3.1)
+    .to('.walk-skip',{opacity:1,duration:.4},3.2)
+    .to('#walk',{clipPath:'inset(0 0 100% 0)',duration:.9,ease:'power4.inOut'},4.15)
+    .add(function(){ heroIn(false); },4.45);
   $('#walk').addEventListener('click',function(){ tl.progress(1); });
-  /* failsafe <=7s */
-  setTimeout(function(){ if(document.body.classList.contains('is-loading')){ tl.kill(); finish(); } },7000);
+  setTimeout(function(){ if(document.body.classList.contains('is-loading')){ tl.kill(); heroIn(true); finish(); } },7000);
+}
+function heroIn(instant){
+  if(!window.gsap) return;
+  var chars=$$('.hero-title .ch');
+  if(instant){ gsap.set(chars,{rotateX:0,yPercent:0,opacity:1}); return; }
+  gsap.to(chars,{rotateX:0,yPercent:0,opacity:1,duration:.85,ease:'power4.out',stagger:.02});
 }
 
 if(document.readyState==='complete') playWalk();
 else addEventListener('load',function(){ setTimeout(playWalk,60); });
-/* absolute failsafe even if load stalls */
 setTimeout(function(){ if(document.body.classList.contains('is-loading') && !window.gsap){ finalStates(); } },5000);
 })();
