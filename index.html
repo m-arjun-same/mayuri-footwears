@@ -6,17 +6,26 @@
 <title>Mayuri Footwears — Step Into Comfort, Walk In Style | Kukatpally, Hyderabad</title>
 <meta name="description" content="Mayuri Footwears, Kukatpally — a complete family footwear shop. Men, women, kids, sports, formal, school, nurse and safety footwear. Open all days 10:30 AM – 9:30 PM.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='88' fill='%23120906'/%3E%3Ccircle cx='100' cy='100' r='84' fill='none' stroke='%23c9a35f' stroke-width='5'/%3E%3Cpath d='M58 148 L58 102 L84 130 L100 106 L116 130 L142 102 L142 148' fill='none' stroke='%23eccf8b' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="css/fonts.css?v=1">
-<link rel="stylesheet" href="css/styles.css?v=1">
+<link rel="stylesheet" href="css/fonts.css?v=2">
+<link rel="stylesheet" href="css/styles.css?v=2">
 </head>
 <body class="is-loading">
 
 <div id="progress" aria-hidden="true"></div>
 
-<!-- ============ STEP CINEMA — the opening walk ============ -->
+<!-- ============ STEP CINEMA · OPENING "THE FIRST STEP" ============ -->
 <div id="walk" aria-hidden="true">
-  <div class="walk-glow"></div>
+  <div class="pool pool-a"></div>
+  <div class="pool pool-b"></div>
   <div class="walk-trail" id="walkTrail"></div>
+  <div class="walk-shoe" id="walkShoe">
+    <img src="assets/p-runner-orange.jpg" alt="">
+    <svg class="lace" viewBox="0 0 300 90" aria-hidden="true">
+      <path id="lacePath" d="M8 62 C 70 18, 130 84, 196 40 S 282 30, 294 44" fill="none" stroke="#eccf8b" stroke-width="3.5" stroke-linecap="round"/>
+      <circle id="laceKnot" cx="196" cy="40" r="5.5" fill="#eccf8b" opacity="0"/>
+    </svg>
+    <div class="walk-shoe-chip"><span>Velocity Street Runner</span><strong>₹2,499</strong></div>
+  </div>
   <div class="walk-word">
     <p class="walk-script">Step into comfort,</p>
     <div class="walk-name">MAYURI</div>
@@ -25,24 +34,24 @@
   <p class="walk-skip">Tap to walk in →</p>
 </div>
 
-<!-- footprint progress trail (the walk continues as you scroll) -->
+<!-- footprint progress trail — stamps in as you pass each stop -->
 <div id="trail" aria-hidden="true"></div>
 
 <!-- ============ HEADER ============ -->
 <header id="header">
   <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
   <nav class="nav-side nav-l" aria-label="Primary">
-    <a href="#collections">Collections</a>
-    <a href="#new">New Arrivals</a>
-    <a href="#best">Best Sellers</a>
+    <a href="#school">School Run</a>
+    <a href="#office">Office Hours</a>
+    <a href="#run">Run Time</a>
   </nav>
   <a class="brand" href="#top" aria-label="Mayuri Footwears — home">
     <span class="brand-emblem" id="brandEmblem"></span>
     <span class="brand-name">MAYURI<small>FOOTWEARS</small></span>
   </a>
   <nav class="nav-side nav-r" aria-label="More">
-    <a href="#safety">Safety</a>
-    <a href="#care">Nurse &amp; Care</a>
+    <a href="#evening">Evening Out</a>
+    <a href="#safety">Safety Shift</a>
     <a href="#visit">Visit Us</a>
   </nav>
   <div class="nav-utils">
@@ -75,13 +84,15 @@
   </div>
 </header>
 <nav id="mobileNav" aria-hidden="true">
-  <a href="#collections">Collections</a><a href="#new">New Arrivals</a><a href="#best">Best Sellers</a>
-  <a href="#safety">Industrial &amp; Safety</a><a href="#care">Nurse &amp; Care</a><a href="#visit">Visit Us</a>
+  <a href="#school">06:00 · School Run</a><a href="#office">09:00 · Office Hours</a><a href="#care">13:00 · On Your Feet</a>
+  <a href="#run">17:00 · Run Time</a><a href="#evening">19:00 · Evening Out</a><a href="#safety">21:30 · Safety Shift</a><a href="#visit">Visit Us</a>
 </nav>
 
 <main id="top">
+  <!-- the walk route — an SVG line that draws itself down the whole page -->
+  <svg id="route" aria-hidden="true" preserveAspectRatio="none"><path id="routePath" fill="none"/></svg>
 
-  <!-- ============ 1 · HERO ============ -->
+  <!-- ============ DAWN · HERO ============ -->
   <section id="hero" class="room">
     <div class="room-bg"><img class="parallax" src="assets/hero.jpg" alt="Athletic sneakers in dramatic light"></div>
     <div class="room-veil veil-dawn"></div>
@@ -91,9 +102,9 @@
         <span class="line-mask"><span class="line">Walk in</span></span>
         <span class="line-mask"><span class="line">Style<em>.</em></span></span>
       </h1>
-      <p class="hero-sub reveal">A complete family footwear shop in the heart of Kukatpally — for school mornings, office days, wedding nights and the hardest working floors.</p>
+      <p class="hero-sub reveal">One shop, one whole day of walking — school runs at dawn, office hours, long shifts, evening runs and nights out. Walk the day with us.</p>
       <div class="hero-ctas reveal">
-        <a class="btn btn-gold magnetic" href="#new"><span>Shop New Arrivals</span></a>
+        <a class="btn btn-gold magnetic" href="#school"><span>Start the Walk</span></a>
         <a class="btn btn-ghost magnetic" href="#visit"><span>Visit the Store</span></a>
       </div>
     </div>
@@ -111,38 +122,52 @@
     <div class="scroll-hint" aria-hidden="true"><i></i></div>
   </section>
 
-  <!-- ============ 2 · COLLECTIONS ============ -->
-  <section id="collections" class="section">
+  <!-- ============ 06:00 · SCHOOL RUN ============ -->
+  <section id="school" class="section stop stop-dawn">
+    <span class="stop-time" aria-hidden="true">06:00</span>
     <div class="sec-head reveal">
-      <p class="sec-eyebrow">01 — The Rooms</p>
-      <h2 class="sec-title">Three Rooms, <em>Every Foot</em></h2>
-      <p class="sec-note">Walk in with the whole family. Walk out with everyone fitted.</p>
+      <p class="sec-eyebrow">06:00 — First Stop</p>
+      <h2 class="sec-title">The School <em>Run</em></h2>
+      <p class="sec-note">Dawn light, tiffin packed, laces double-knotted. School shoes and kids' sneakers that survive the whole year — playground included.</p>
     </div>
-    <div class="rooms-grid">
-      <a class="room-card reveal" href="#new" data-goto="men">
-        <div class="room-card-media"><img class="parallax-sm" src="assets/room-men.jpg" alt="Men's formal leather shoes"></div>
-        <div class="room-card-shade"></div>
-        <div class="room-card-body"><p class="rc-eyebrow">Formal · Sports · Casual</p><h3>Men</h3><p class="rc-link">Enter the room →</p></div>
-      </a>
-      <a class="room-card reveal" href="#new" data-goto="women">
-        <div class="room-card-media"><img class="parallax-sm" src="assets/room-women.jpg" alt="Women's golden heels under warm light"></div>
-        <div class="room-card-shade"></div>
-        <div class="room-card-body"><p class="rc-eyebrow">Heels · Bellies · Sandals</p><h3>Women</h3><p class="rc-link">Enter the room →</p></div>
-      </a>
-      <a class="room-card reveal" href="#new" data-goto="kids">
-        <div class="room-card-media"><img class="parallax-sm" src="assets/room-kids.jpg" alt="Child's sneakers with red laces"></div>
-        <div class="room-card-shade"></div>
-        <div class="room-card-body"><p class="rc-eyebrow">School · Play · Party</p><h3>Kids</h3><p class="rc-link">Enter the room →</p></div>
-      </a>
+    <div class="stop-split">
+      <div class="stop-media reveal"><img class="parallax-sm" src="assets/room-kids.jpg" alt="Child's shoes with red laces, ready for school"></div>
+      <div class="grid grid-2" id="gridSchool"></div>
     </div>
   </section>
 
-  <!-- ============ 3 · NEW ARRIVALS ============ -->
-  <section id="new" class="section section-dark">
+  <!-- ============ 09:00 · OFFICE HOURS ============ -->
+  <section id="office" class="section stop stop-morning">
+    <span class="stop-time" aria-hidden="true">09:00</span>
     <div class="sec-head reveal">
-      <p class="sec-eyebrow">02 — Just Landed</p>
-      <h2 class="sec-title">New <em>Arrivals</em></h2>
-      <p class="sec-note">Fresh shelves this season. Tap any pair for a closer look.</p>
+      <p class="sec-eyebrow">09:00 — Morning</p>
+      <h2 class="sec-title">Office <em>Hours</em></h2>
+      <p class="sec-note">Clean morning light, sharp leather. Formals and loafers that walk into the metro at nine and still look fresh at six.</p>
+    </div>
+    <div class="grid grid-3" id="gridOffice"></div>
+  </section>
+
+  <!-- ============ 13:00 · ON YOUR FEET ALL DAY ============ -->
+  <section id="care" class="section stop stop-noon">
+    <span class="stop-time" aria-hidden="true">13:00</span>
+    <div class="sec-head reveal">
+      <p class="sec-eyebrow">13:00 — High Noon</p>
+      <h2 class="sec-title">On Your Feet <em>All Day</em></h2>
+      <p class="sec-note">The brightest hour, the longest shifts. Nurse shoes and comfort walkers with deep cushioning — a specialist shelf few footwear shops keep. We do.</p>
+    </div>
+    <div class="stop-split">
+      <div class="grid grid-2" id="gridCare"></div>
+      <div class="stop-media reveal"><img class="parallax-sm" src="assets/nurse.jpg" alt="Clean white comfort shoes worn all day"></div>
+    </div>
+  </section>
+
+  <!-- ============ 17:00 · RUN TIME (+ NEW ARRIVALS) ============ -->
+  <section id="run" class="section stop stop-evening">
+    <span class="stop-time" aria-hidden="true">17:00</span>
+    <div class="sec-head reveal">
+      <p class="sec-eyebrow">17:00 — Golden Hour</p>
+      <h2 class="sec-title">Run <em>Time</em></h2>
+      <p class="sec-note">Work's done, the light turns gold, the roads call. This season's fresh sports shelves — tap any pair for a closer look.</p>
     </div>
     <div class="rail-wrap reveal">
       <div class="rail" id="railNew"></div>
@@ -153,86 +178,78 @@
     </div>
   </section>
 
-  <!-- ============ 4 · BEST SELLERS ============ -->
-  <section id="best" class="section">
-    <div class="sec-head reveal">
-      <p class="sec-eyebrow">03 — Loved by Kukatpally</p>
-      <h2 class="sec-title">Best <em>Sellers</em></h2>
-      <p class="sec-note">The pairs our regulars come back for, season after season.</p>
-    </div>
-    <div class="grid" id="gridBest"></div>
-  </section>
-
-  <!-- ============ 4b · THE RUNWAY (pinned, scroll-driven) ============ -->
-  <section id="runway">
-    <div class="rw-pin">
+  <!-- ============ THE STRIDE (pinned) ============ -->
+  <section id="stride">
+    <div class="st-pin">
       <div class="rw-head">
-        <p class="sec-eyebrow">04 — The Runway</p>
-        <h2 class="sec-title">One Stage. <em>Three Icons.</em></h2>
-        <p class="rw-hint">Keep scrolling — the stage turns</p>
+        <div>
+          <p class="sec-eyebrow">The Signature Scene</p>
+          <h2 class="sec-title">The <em>Stride</em></h2>
+        </div>
+        <p class="rw-hint">Keep scrolling — feel the stride</p>
       </div>
-      <div class="rw-stage">
-        <article class="rw-slide">
-          <span class="rw-idx">01</span>
-          <div class="rw-media"><img src="assets/p-runner.jpg" alt="Velocity Street Runner in ember red"></div>
-          <div class="rw-info"><p class="rw-cat">Men · Sports</p><h3>Velocity Street Runner</h3><p>Feather-light knit, cushioned stride. The morning-run favourite.</p><p class="rw-price">₹2,499 <s>₹3,299</s></p><button class="pbtn pbtn-add rw-add" data-add="runner">Add to Bag</button></div>
-        </article>
-        <article class="rw-slide">
-          <span class="rw-idx">02</span>
-          <div class="rw-media"><img src="assets/p-goldheels.jpg" alt="Mehr gold bridal heels"></div>
-          <div class="rw-info"><p class="rw-cat">Women · Festive</p><h3>Mehr Gold Bridal Heels</h3><p>Shaadi-season sparkle with a cushioned soul. All evening, no ache.</p><p class="rw-price">₹2,199 <s>₹2,899</s></p><button class="pbtn pbtn-add rw-add" data-add="goldheels">Add to Bag</button></div>
-        </article>
-        <article class="rw-slide">
-          <span class="rw-idx">03</span>
-          <div class="rw-media"><img src="assets/p-safety.jpg" alt="Titan steel-toe safety boot"></div>
-          <div class="rw-info"><p class="rw-cat">Industrial · Safety</p><h3>Titan Steel-Toe Boot</h3><p>Steel toe, anti-skid, oil-resistant. The hardest-working pair we sell.</p><p class="rw-price">₹2,799 <s>₹3,599</s></p><button class="pbtn pbtn-add rw-add" data-add="safetypro">Add to Bag</button></div>
-        </article>
+      <div class="st-stage">
+        <div class="st-shoe" id="strideShoe">
+          <img class="st-img is-on" src="assets/p-runner.jpg" alt="Velocity Street Runner — stride one">
+          <img class="st-img" src="assets/p-runner-orange.jpg" alt="Velocity Street Runner — stride two">
+          <img class="st-img" src="assets/p-runner-blue.jpg" alt="Velocity Street Runner — stride three">
+          <div class="st-shadow"></div>
+        </div>
+        <div class="st-steps" id="strideSteps" aria-hidden="true"></div>
+        <div class="st-copy">
+          <p class="rw-cat">Featured · Men Sports</p>
+          <h3>Velocity Street Runner</h3>
+          <p>Three colourways, one stride. Feather-light knit, cushioned landing, ₹2,499.</p>
+          <button class="pbtn pbtn-add rw-add" data-add="runner">Add to Bag</button>
+        </div>
       </div>
-      <div class="rw-foot"><div class="rw-progress"><i id="rwBar"></i></div><p class="rw-count"><span id="rwNow">01</span> / 03</p></div>
+      <div class="rw-foot"><div class="rw-progress"><i id="rwBar"></i></div><p class="rw-count"><span id="rwNow">Stride 1</span> / 3</p></div>
     </div>
   </section>
 
-  <!-- ============ 5 · SAFETY SPOTLIGHT ============ -->
-  <section id="safety" class="room room-tall">
+  <!-- ============ 19:00 · EVENING OUT (+ BEST SELLERS) ============ -->
+  <section id="evening" class="section stop stop-dusk">
+    <span class="stop-time" aria-hidden="true">19:00</span>
+    <div class="sec-head reveal">
+      <p class="sec-eyebrow">19:00 — Dusk</p>
+      <h2 class="sec-title">Evening <em>Out</em></h2>
+      <p class="sec-note">Dusk settles, plans sparkle. Festive heels, bridal gold and the pairs Kukatpally loves most — our best sellers walk out every evening.</p>
+    </div>
+    <div class="grid grid-3" id="gridEvening"></div>
+    <div class="best-band reveal">
+      <p class="best-band-title">Best Sellers <em>— the day's most loved</em></p>
+      <div class="rail" id="railBest"></div>
+    </div>
+  </section>
+
+  <!-- ============ NAMES ALONG THE WAY ============ -->
+  <section id="brands" aria-label="Brands in store">
+    <p class="brands-eyebrow reveal">Names along the way — brands on our shelves</p>
+    <div class="marquee" aria-hidden="true"><div class="marquee-track" id="brandTrack"></div></div>
+  </section>
+
+  <!-- ============ 21:30 · THE SAFETY SHIFT ============ -->
+  <section id="safety" class="room room-tall stop-night">
     <div class="room-bg"><img class="parallax" src="assets/safety.jpg" alt="Work boot on a construction site"></div>
     <div class="room-veil veil-left veil-dusk"></div>
     <div class="room-content safety-content">
-      <p class="sec-eyebrow reveal">05 — The Mayuri Difference</p>
+      <p class="sec-eyebrow reveal">21:30 — Night Shift</p>
       <h2 class="sec-title light reveal">Built for the<br><em>Hardest Floors</em></h2>
       <p class="hero-sub reveal">Most shoe shops stop at fashion. We stock a full industrial range — steel-toe safety shoes and work boots trusted on sites and factory floors across Hyderabad.</p>
       <div class="chips reveal">
         <span>Steel Toe</span><span>Anti-Skid Sole</span><span>Oil Resistant</span><span>Shock Absorb</span><span>UK 5 – 11</span>
       </div>
       <div class="hero-ctas reveal">
-        <a class="btn btn-gold magnetic" href="#best"><span>See Safety Range</span></a>
+        <button class="btn btn-gold magnetic" data-qv="safetypro"><span>See the Titan Boot</span></button>
       </div>
     </div>
   </section>
 
-  <!-- ============ 6 · NURSE & CARE ============ -->
-  <section id="care" class="section">
-    <div class="care-wrap">
-      <div class="care-media reveal"><img class="parallax-sm" src="assets/nurse.jpg" alt="Clean white comfort shoes"></div>
-      <div class="care-body">
-        <p class="sec-eyebrow reveal">06 — On Your Feet All Day</p>
-        <h2 class="sec-title reveal">Nurse <em>&amp; Care</em></h2>
-        <p class="sec-note reveal">Twelve-hour shifts deserve better shoes. Soft-cushioned nurse shoes and bellies, made for hospital corridors, clinics and caring hands — a range few footwear shops bother to keep. We do.</p>
-        <div class="grid grid-care" id="gridCare"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ 7 · BRANDS ============ -->
-  <section id="brands" aria-label="Brands in store">
-    <p class="brands-eyebrow reveal">Brands on our shelves</p>
-    <div class="marquee" aria-hidden="true"><div class="marquee-track" id="brandTrack"></div></div>
-  </section>
-
-  <!-- ============ 8 · WHY MAYURI ============ -->
-  <section id="why" class="section section-dark">
+  <!-- ============ WHY MAYURI ============ -->
+  <section id="why" class="section stop stop-night2">
     <div class="why-wrap">
       <div class="why-body">
-        <p class="sec-eyebrow reveal">07 — Why Mayuri</p>
+        <p class="sec-eyebrow reveal">End of the Walk</p>
         <h2 class="sec-title reveal">One Shop,<br><em>Whole Family</em></h2>
         <div class="why-points">
           <div class="why-point reveal"><h3>Every age, every size</h3><p>From a toddler's first school shoe to grandpa's daily walker — sizes and styles for the full family under one roof.</p></div>
@@ -244,10 +261,10 @@
     </div>
   </section>
 
-  <!-- ============ 9 · VISIT ============ -->
-  <section id="visit" class="section">
+  <!-- ============ ARRIVE HOME · VISIT ============ -->
+  <section id="visit" class="section stop stop-night2">
     <div class="sec-head reveal">
-      <p class="sec-eyebrow">08 — Visit Us</p>
+      <p class="sec-eyebrow">Arrive Home</p>
       <h2 class="sec-title">Find Us in <em>Kukatpally</em></h2>
     </div>
     <div class="visit-grid">
@@ -273,13 +290,13 @@
 
 </main>
 
-<!-- ============ 10 · FOOTER ============ -->
+<!-- ============ FOOTER · NIGHT ============ -->
 <footer id="footer">
   <div class="foot-emblem" id="footEmblem"></div>
   <p class="foot-script">Step into comfort, walk in style</p>
   <div class="foot-cols">
-    <div><h4>Shop</h4><a href="#collections">Collections</a><a href="#new">New Arrivals</a><a href="#best">Best Sellers</a></div>
-    <div><h4>Specialist</h4><a href="#safety">Industrial &amp; Safety</a><a href="#care">Nurse &amp; Care</a><a href="#collections">School Shoes</a></div>
+    <div><h4>The Walk</h4><a href="#school">06:00 School Run</a><a href="#office">09:00 Office Hours</a><a href="#run">17:00 Run Time</a></div>
+    <div><h4>Specialist</h4><a href="#safety">Industrial &amp; Safety</a><a href="#care">Nurse &amp; Care</a><a href="#evening">Evening Out</a></div>
     <div><h4>Visit</h4><a href="#visit">Kukatpally, Hyderabad</a><a href="tel:+919849000453">+91 98490 00453</a><a href="#visit">10:30 AM – 9:30 PM, Daily</a></div>
   </div>
   <div class="giant" aria-hidden="true">MAYURI</div>
@@ -316,11 +333,11 @@
 
 <div id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/lib/gsap.min.js?v=1"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=1"></script>
-<script src="js/lib/CustomEase.min.js?v=1"></script>
-<script src="js/lib/lenis.min.js?v=1"></script>
-<script src="js/data.js?v=1"></script>
-<script src="js/main.js?v=1"></script>
+<script src="js/lib/gsap.min.js?v=2"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=2"></script>
+<script src="js/lib/CustomEase.min.js?v=2"></script>
+<script src="js/lib/lenis.min.js?v=2"></script>
+<script src="js/data.js?v=2"></script>
+<script src="js/main.js?v=2"></script>
 </body>
 </html>

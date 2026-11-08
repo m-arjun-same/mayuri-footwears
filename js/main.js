@@ -50,12 +50,12 @@ function footprintSVG(){
   for(var i=0;i<12;i++){ var s=document.createElement('span'); s.className='tstep'; s.innerHTML=footprintSVG(); s.style.color='#c9a35f'; t.appendChild(s); }
 })();
 /* the opening walk path — an S of steps rising to the wordmark */
-var WALK_STEPS=[{x:6,y:88,r:-16},{x:15,y:80,r:12},{x:11,y:71,r:-13},{x:20,y:63,r:11},{x:18,y:54,r:-11},{x:27,y:47,r:9},{x:27,y:39,r:-9},{x:36,y:33,r:7}];
+var WALK_STEPS=[{x:47,y:6,w:15,r:-7},{x:53,y:15,w:19,r:6},{x:45,y:25,w:24,r:-6},{x:54,y:36,w:30,r:6},{x:44,y:48,w:38,r:-5},{x:55,y:60,w:47,r:5}];
 (function(){
   var tr=$('#walkTrail'); if(!tr) return;
   WALK_STEPS.forEach(function(st,i){
     var d=document.createElement('div'); d.className='step';
-    d.style.left=st.x+'%'; d.style.top=st.y+'%';
+    d.style.left=st.x+'%'; d.style.top=st.y+'%'; d.style.width=st.w+'px';
     d.style.transform='rotate('+st.r+'deg) scaleX('+(i%2? -1:1)+')';
     d.style.color='#d9b96a'; d.innerHTML=footprintSVG();
     tr.appendChild(d);
@@ -169,9 +169,13 @@ function mountCards(sel,list){
   var el=$(sel); if(!el) return;
   el.innerHTML = list.map(function(p,i){ return cardHTML(p,i); }).join('');
 }
-mountCards('#railNew',  PRODUCTS.filter(function(p){ return p.tags.indexOf('new')>-1; }));
-mountCards('#gridBest', PRODUCTS.filter(function(p){ return p.tags.indexOf('best')>-1; }));
+function mountIds(sel,ids){ mountCards(sel, ids.map(function(id){ return byId[id]; }).filter(Boolean)); }
+mountIds('#gridSchool', ['kidsflex','school']);
+mountIds('#gridOffice', ['oxford','brogue','loafer']);
 mountCards('#gridCare', PRODUCTS.filter(function(p){ return p.tags.indexOf('care')>-1; }));
+mountCards('#railNew',  PRODUCTS.filter(function(p){ return p.tags.indexOf('new')>-1; }));
+mountIds('#gridEvening',['goldheels','heels','sandals']);
+mountCards('#railBest', PRODUCTS.filter(function(p){ return p.tags.indexOf('best')>-1; }));
 
 document.addEventListener('click',function(e){
   var add=e.target.closest('[data-add]');
@@ -193,11 +197,6 @@ document.addEventListener('click',function(e){
 /* rail arrows */
 $('#railPrev').addEventListener('click',function(){ $('#railNew').scrollBy({left:-340,behavior:'smooth'}); });
 $('#railNext').addEventListener('click',function(){ $('#railNew').scrollBy({left: 340,behavior:'smooth'}); });
-
-/* room cards scroll to products */
-$$('.room-card').forEach(function(c){
-  c.addEventListener('click',function(){ /* anchor default is fine */ });
-});
 
 /* ================= QUICK VIEW ================= */
 var qvP=null, qvSize=null, qvColor='';
@@ -249,6 +248,12 @@ $('#qvAdd').addEventListener('click',function(){ if(qvP){ addToBag(qvP.id,qvSize
 $('#qvWish').addEventListener('click',function(){ if(qvP){ toggleWish(qvP.id); syncQvWish(); } });
 $$('#qv [data-close]').forEach(function(el){ el.addEventListener('click',closeQV); });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeQV(); $('#mobileNav').classList.remove('open'); } });
+
+/* stride footprints under the featured shoe */
+(function(){
+  var box=$('#strideSteps'); if(!box) return;
+  for(var i=0;i<6;i++){ var sp=document.createElement('span'); sp.className='sstep'; sp.innerHTML=footprintSVG(); sp.style.transform='rotate(90deg) scaleX('+(i%2?-1:1)+')'; box.appendChild(sp); }
+})();
 
 /* ================= BRAND MARQUEE ================= */
 (function(){
@@ -331,33 +336,52 @@ function initScrollFX(){
     gsap.fromTo(img,{yPercent:-6},{yPercent:6,ease:'none',
       scrollTrigger:{trigger:img,start:'top bottom',end:'bottom top',scrub:.8}});
   });
-  /* RUNWAY — pinned, scroll-driven stage (desktop; mobile stacks via CSS) */
+  /* THE STRIDE — pinned: scrolling scrubs one full stride (desktop; mobile shows pose one) */
   var mm = gsap.matchMedia();
   mm.add('(min-width: 861px)', function(){
-    var slides = $$('.rw-slide');
-    gsap.set(slides,{autoAlpha:0}); gsap.set(slides[0],{autoAlpha:1});
-    var rwTl = gsap.timeline({
-      scrollTrigger:{ trigger:'#runway', start:'top top', end:'+=170%', scrub:.6, pin:true, anticipatePin:1,
+    var imgs = $$('.st-img'), shoe = $('#strideShoe'), ssteps = $$('#strideSteps .sstep');
+    gsap.set(imgs,{autoAlpha:0}); gsap.set(imgs[0],{autoAlpha:1});
+    gsap.set(shoe,{xPercent:-7, rotation:-5});
+    var stTl = gsap.timeline({
+      scrollTrigger:{ trigger:'#stride', start:'top top', end:'+=160%', scrub:.55, pin:true, anticipatePin:1,
         onUpdate:function(st){
           gsap.set('#rwBar',{scaleX:st.progress});
-          var n = Math.min(3, Math.floor(st.progress*3)+1);
-          $('#rwNow').textContent = '0'+n;
+          var beat = Math.min(3, Math.floor(st.progress*3)+1);
+          $('#rwNow').textContent = 'Stride '+beat;
+          ssteps.forEach(function(sp,i){ sp.classList.toggle('lit', i < beat*2); });
         } }
     });
-    slides.forEach(function(sl,i){
-      if(i===0) return;
-      var prev = slides[i-1];
-      rwTl.to(prev.querySelector('.rw-media'),{xPercent:-7,opacity:0,duration:.8,ease:'power2.inOut'}, i)
-          .to(prev.querySelector('.rw-info'),{y:-34,opacity:0,duration:.6,ease:'power2.in'}, i)
-          .set(prev,{autoAlpha:0})
-          .fromTo(sl,{autoAlpha:0},{autoAlpha:1,duration:.25}, i+.35)
-          .fromTo(sl.querySelector('.rw-media'),{xPercent:9,scale:1.05},{xPercent:0,scale:1,duration:.85,ease:'power3.out'}, i+.35)
-          .fromTo(sl.querySelector('.rw-info'),{y:44,opacity:0},{y:0,opacity:1,duration:.7,ease:'power3.out'}, i+.5)
-          .fromTo(sl.querySelector('.rw-idx'),{opacity:0,x:40},{opacity:1,x:0,duration:.7}, i+.45);
-    });
-    rwTl.to({},{duration:.6}); /* hold last icon */
+    /* beat 1 -> 2: shoe swings through, next colourway lands */
+    stTl.to(shoe,{xPercent:0, rotation:2, duration:1, ease:'power1.inOut'}, 0)
+        .to(shoe,{y:-16, duration:.5, ease:'power2.out'}, .5)
+        .to(shoe,{y:0, duration:.5, ease:'power2.in'}, 1)
+        .to(imgs[0],{autoAlpha:0, duration:.3}, .85)
+        .to(imgs[1],{autoAlpha:1, duration:.3}, .85)
+    /* beat 2 -> 3 */
+        .to(shoe,{xPercent:7, rotation:-2, duration:1, ease:'power1.inOut'}, 1.6)
+        .to(shoe,{y:-16, duration:.5, ease:'power2.out'}, 2.1)
+        .to(shoe,{y:0, duration:.5, ease:'power2.in'}, 2.6)
+        .to(imgs[1],{autoAlpha:0, duration:.3}, 2.45)
+        .to(imgs[2],{autoAlpha:1, duration:.3}, 2.45)
+        .to(shoe,{xPercent:9, rotation:0, duration:.5, ease:'power2.out'}, 3.1)
+        .to({},{duration:.4});
     return function(){};
   });
+  /* THE ROUTE — an SVG line down the page that draws itself as you walk */
+  buildRoute();
+  function buildRoute(){
+    var svg=$('#route'), path=$('#routePath'), main=$('#top');
+    if(!svg || !path || !main) return;
+    var H = main.offsetHeight; if(H<800) return;
+    svg.setAttribute('viewBox','0 0 60 '+H); svg.style.height=H+'px';
+    var d='M30 -10', y=-10, left=true;
+    while(y < H){ y+=620; d+=' C '+(left?4:56)+' '+(y-380)+', '+(left?56:4)+' '+(y-240)+', 30 '+y; left=!left; }
+    path.setAttribute('d',d);
+    var L=path.getTotalLength();
+    path.style.strokeDasharray=L; path.style.strokeDashoffset=L;
+    gsap.to(path,{strokeDashoffset:0, ease:'none',
+      scrollTrigger:{trigger:main, start:'top top', end:'bottom bottom', scrub:.4}});
+  }
   addEventListener('load',function(){ ScrollTrigger.refresh(); });
 }
 
@@ -399,21 +423,30 @@ function playWalk(){
   var done=false;
   function finish(){ if(done) return; done=true; markSeen(); gsap.set('.hero-title .line, #hero .room-bg img',{clearProps:'transform'}); finalStates(); initLenis(); initScrollFX(); }
   var tl=gsap.timeline({ defaults:{ease:'power2.out'}, onComplete:finish });
-  /* dawn breaks */
-  tl.to('.walk-glow',{opacity:1,duration:1.6,ease:'power1.inOut'},0)
-    .to('.walk-skip',{opacity:1,duration:.6},.8)
-  /* the walk: one footstep at a time, heel-press landing */
-    .to('.walk-trail .step',{opacity:.92,duration:.34,ease:'stepPress',stagger:.30},.35)
-    .fromTo('.walk-trail .step',{scale:1.22},{scale:1,duration:.34,ease:'stepPress',stagger:.30},.35)
-  /* the name arrives where the steps lead */
-    .to('.walk-script',{opacity:1,y:0,duration:.7,ease:'luxOut'},2.55)
-    .fromTo('.walk-name',{opacity:0,y:34},{opacity:1,y:0,duration:.9,ease:'luxOut'},2.75)
-    .to('.walk-sub',{opacity:1,duration:.7},3.25)
-  /* walk in: the whole dawn lifts away like a shop shutter at opening time */
-    .to('#walk',{yPercent:-100,duration:1.05,ease:'luxIO'},4.15)
-    .fromTo('#hero .room-bg img',{scale:1.12},{scale:1.04,duration:1.6,ease:'power2.out'},4.15)
-    .to('.hero-title .line',{yPercent:0,duration:1.1,ease:'luxOut',stagger:.12},4.55)
-    .fromTo('#hero .script, #hero .hero-sub, #hero .hero-ctas, #hero .hero-meta',{y:36,opacity:0},{y:0,opacity:1,duration:.9,ease:'luxOut',stagger:.1},4.8);
+  /* street-level darkness; pools of warm light wake up */
+  tl.to('.pool-b',{opacity:1,duration:1.2,ease:'power1.inOut'},0)
+    .to('.pool-a',{opacity:1,duration:1.4,ease:'power1.inOut'},.2)
+    .to('.walk-skip',{opacity:1,duration:.6},.9)
+  /* footprints stamp in, walking toward you — far and small, near and large */
+    .fromTo('.walk-trail .step',{opacity:0,scale:1.35},{opacity:.94,scale:1,duration:.34,ease:'stepPress',stagger:.27},.45)
+  /* the hero shoe steps into the light pool */
+    .fromTo('#walkShoe',{opacity:0,y:84,scale:.84,rotation:-6},{opacity:1,y:0,scale:1,rotation:-2,duration:.85,ease:'stepPress'},2.15)
+  /* a shoelace pulls tight */
+    .add(function(){
+       var lp=$('#lacePath'); if(!lp) return;
+       var L=lp.getTotalLength(); lp.style.strokeDasharray=L; lp.style.strokeDashoffset=L;
+       gsap.to(lp,{strokeDashoffset:0,duration:.95,ease:'power2.inOut'});
+       gsap.to('#laceKnot',{opacity:1,duration:.3,delay:.8});
+     },2.95)
+  /* the name rises — camera-feel */
+    .to('.walk-script',{opacity:1,duration:.7,ease:'luxOut'},3.35)
+    .fromTo('.walk-name',{opacity:0,y:34},{opacity:1,y:0,duration:.9,ease:'luxOut'},3.55)
+    .to('.walk-sub',{opacity:1,duration:.7},4.0)
+  /* rise into the hero */
+    .to('#walk',{yPercent:-100,duration:1.05,ease:'luxIO'},4.75)
+    .fromTo('#hero .room-bg img',{scale:1.12},{scale:1.04,duration:1.6,ease:'power2.out'},4.75)
+    .to('.hero-title .line',{yPercent:0,duration:1.1,ease:'luxOut',stagger:.12},5.15)
+    .fromTo('#hero .script, #hero .hero-sub, #hero .hero-ctas, #hero .hero-meta',{y:36,opacity:0},{y:0,opacity:1,duration:.9,ease:'luxOut',stagger:.1},5.4);
   /* tap to skip */
   $('#walk').addEventListener('click',function(){ tl.progress(1); });
   /* failsafe <=7s */
