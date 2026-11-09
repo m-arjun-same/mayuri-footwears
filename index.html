@@ -6,8 +6,8 @@
 <title>Mayuri Footwears — Step Into Comfort, Walk In Style | Kukatpally, Hyderabad</title>
 <meta name="description" content="Mayuri Footwears, Kukatpally — a complete family footwear shop. Men, women, kids, sports, formal, school, nurse and safety footwear. Open all days 10:30 AM – 9:30 PM.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='88' fill='%23f3ede1'/%3E%3Ccircle cx='100' cy='100' r='84' fill='none' stroke='%2316110b' stroke-width='6'/%3E%3Cpath d='M58 148 L58 102 L84 130 L100 106 L116 130 L142 102 L142 148' fill='none' stroke='%23ff4d12' stroke-width='11' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="css/fonts.css?v=3">
-<link rel="stylesheet" href="css/styles.css?v=3">
+<link rel="stylesheet" href="css/fonts.css?v=4">
+<link rel="stylesheet" href="css/styles.css?v=4">
 </head>
 <body class="is-loading">
 
@@ -18,36 +18,24 @@
 <!-- custom cursor (desktop, fine pointer only) -->
 <div id="cursor" aria-hidden="true"><span id="cursorLabel"></span></div>
 
-<!-- ============ OPENING "THE FIRST STEP" — starting-line version ============ -->
-<div id="walk" aria-hidden="true">
-  <div class="walk-track" id="walkTrail"></div>
-  <div class="walk-shoe" id="walkShoe">
-    <img src="assets/p-runner-orange.jpg" alt="">
-    <div class="walk-shoe-chip"><span>Velocity Street Runner</span><strong>₹2,499</strong></div>
-  </div>
-  <div class="walk-word">
-    <p class="walk-kicker">Kukatpally · Hyderabad · Est. for every family</p>
-    <div class="walk-name">MAYURI</div>
-    <p class="walk-sub">FOOTWEARS — A DAY IN STEPS</p>
-  </div>
-  <p class="walk-skip">Tap to walk in</p>
+<!-- ============ OPENING — brand wipe (adult, no devices) ============ -->
+<div id="intro" aria-hidden="true">
+  <div class="intro-word">MAYURI</div>
+  <p class="intro-sub">FOOTWEARS · KUKATPALLY</p>
 </div>
-
-<!-- footprint progress trail -->
-<div id="trail" aria-hidden="true"></div>
 
 <!-- ============ HEADER — the loud bar ============ -->
 <header id="header">
   <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
   <a class="brand" href="#top" aria-label="Mayuri Footwears — home">
-    <span class="brand-emblem" id="brandEmblem"></span>
+    <span class="brand-mark" aria-hidden="true">M</span>
     <span class="brand-name">MAYURI<small>FOOTWEARS · KUKATPALLY</small></span>
   </a>
   <nav class="nav-side" aria-label="Primary">
+    <a href="#inside">The Shop</a>
+    <a href="#departments">Departments</a>
     <a href="#runway">Collections</a>
-    <a href="#school">School</a>
-    <a href="#office">Office</a>
-    <a href="#run">Run</a>
+    <a href="#brandwall">Brands</a>
     <a href="#safety">Safety</a>
     <a href="#visit">Visit</a>
   </nav>
@@ -81,41 +69,99 @@
   </div>
 </header>
 <nav id="mobileNav" aria-hidden="true">
-  <a href="#runway">Collections</a><a href="#school">06:00 · School Run</a><a href="#office">09:00 · Office Hours</a><a href="#care">13:00 · On Your Feet</a>
+  <a href="#inside">The Shop</a><a href="#departments">Departments</a><a href="#runway">Collections</a><a href="#brandwall">Brands</a>
+  <a href="#school">06:00 · School Run</a><a href="#office">09:00 · Office Hours</a><a href="#care">13:00 · On Your Feet</a>
   <a href="#run">17:00 · Run Time</a><a href="#evening">19:00 · Evening Out</a><a href="#safety">21:30 · Safety Shift</a><a href="#visit">Visit Us</a>
+  <a href="tel:+919849000453">Call · 98490 00453</a>
 </nav>
 
 <main id="top">
 
-  <!-- ============ HERO — WebGL shoe stage + kinetic type ============ -->
+  <!-- ============ HERO v4 — full-bleed business cinema ============ -->
   <section id="hero">
-    <div class="hero-word" aria-hidden="true">STEP</div>
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <p class="hero-kicker">A complete family footwear shop — Kukatpally</p>
-        <h1 class="hero-title">
-          <span class="line-mask"><span class="line" data-split>Walk in</span></span>
-          <span class="line-mask"><span class="line volt" data-split>Style.</span></span>
-        </h1>
-        <p class="hero-sub">One shop, one whole day of walking. School runs at dawn, office hours, long shifts, evening runs and nights out. Scroll, and walk the day with us.</p>
-        <div class="hero-ctas">
-          <a class="btn btn-volt" href="#runway"><span>Start the Walk</span></a>
-          <a class="btn btn-ink" href="#visit"><span>Visit the Store</span></a>
-        </div>
-        <div class="hero-meta">
-          <span>Open all days · 10:30 AM – 9:30 PM</span>
-          <span class="dot"></span>
-          <span>Near Metro Pillar 824</span>
-        </div>
+    <div class="hero-bg" aria-hidden="true">
+      <img class="kb kb-1" src="assets/p-runner-orange.jpg" alt="">
+      <img class="kb kb-2" src="assets/store.jpg" alt="">
+      <img class="kb kb-3" src="assets/safety.jpg" alt="">
+    </div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="hero-kicker light">Kukatpally · Main Road · Hyderabad</p>
+      <h1 class="hero-mark" data-split>MAYURI</h1>
+      <p class="hero-line">A complete family footwear shop — Kukatpally</p>
+      <p class="hero-sub light">Men, women, kids, sports, school, nurse &amp; industrial safety — every pair your family needs, under one roof.</p>
+    </div>
+    <div class="proof-bar" role="region" aria-label="Shop status and contact">
+      <div class="pf-status">
+        <span class="status-dot" data-status-dot></span>
+        <span class="pf-status-text"><strong data-status-text>Checking hours…</strong><small data-status-sub>Open all 7 days · 10:30 AM – 9:30 PM</small></span>
       </div>
-      <div class="hero-stage" data-cursor="VIEW">
-        <div class="gl-stage" id="glHero">
-          <img class="gl-fallback" src="assets/p-runner-orange.jpg" alt="Velocity Street Runner in Sunset Orange">
-          <canvas class="gl-canvas" aria-hidden="true"></canvas>
-          <div class="hp-chip"><span>Velocity Street Runner</span><strong>₹2,499</strong></div>
-        </div>
-        <p class="stage-note">Move your mouse. The shoe pushes back.</p>
+      <div class="pf-fact"><strong>Metro Pillar 824</strong><small>Main Road · Near KKP Police Station</small></div>
+      <div class="pf-fact pf-phone"><strong>+91 98490 00453</strong><small>Call or WhatsApp the shop</small></div>
+      <div class="pf-ctas">
+        <a class="btn btn-volt" href="tel:+919849000453"><span>Call the Shop</span></a>
+        <a class="btn btn-wa" href="https://wa.me/919849000453" target="_blank" rel="noopener"><span>WhatsApp</span></a>
+        <a class="btn btn-ghost" href="https://www.google.com/maps/dir/?api=1&amp;destination=17.482036,78.414956" target="_blank" rel="noopener"><span>Directions</span></a>
       </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"><span class="cue-line"></span><span>Scroll</span></div>
+  </section>
+
+  <!-- ============ INSIDE MAYURI — the actual shop, staged ============ -->
+  <section id="inside">
+    <div class="inside-bg"><img id="insideImg" src="assets/store.jpg" alt="Shelves of footwear inside a family shoe store"></div>
+    <div class="inside-shade" aria-hidden="true"></div>
+    <div class="inside-inner">
+      <p class="sec-eyebrow light">Inside Mayuri</p>
+      <h2 class="sec-title light" data-split>One Roof, Every Pair</h2>
+      <p class="sec-note light">Walk in for a toddler's first school shoe and walk out with work boots for yourself. Six departments deep, shelves stacked with the brands Hyderabad trusts — this is a working family shoe shop, not a boutique.</p>
+      <div class="stat-strip">
+        <div class="stat"><strong><span data-count="6">0</span>+</strong><small>Departments</small></div>
+        <div class="stat"><strong><span data-count="10">0</span></strong><small>Brands on shelf</small></div>
+        <div class="stat"><strong><span data-count="7">0</span></strong><small>Days open a week</small></div>
+        <div class="stat"><strong><span data-count="11">0</span> hrs</strong><small>Open every day</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEPARTMENTS — the actual range ============ -->
+  <section id="departments">
+    <div class="sec-head">
+      <p class="sec-eyebrow">The Range</p>
+      <h2 class="sec-title" data-split>Six Departments, One Shop</h2>
+      <p class="sec-note">The full Mayuri range — what is actually on the shelves at Pillar 824.</p>
+    </div>
+    <div class="dept-grid">
+      <article class="dept-card" data-sig="wipe">
+        <div class="dept-media"><img class="vskew" src="assets/room-men.jpg" alt="Men's footwear department" loading="lazy"></div>
+        <div class="dept-body"><p class="dept-no">Dept. 01</p><h3>Men</h3>
+          <ul><li>Formals &amp; Oxfords</li><li>Loafers &amp; casuals</li><li>Sandals &amp; slippers</li><li>Sports &amp; walking</li></ul></div>
+      </article>
+      <article class="dept-card" data-sig="mask">
+        <div class="dept-media"><img class="vskew" src="assets/room-women.jpg" alt="Women's footwear department" loading="lazy"></div>
+        <div class="dept-body"><p class="dept-no">Dept. 02</p><h3>Women</h3>
+          <ul><li>Heels &amp; wedges</li><li>Festive &amp; bridal</li><li>Sandals &amp; bellies</li><li>Daily comfort wear</li></ul></div>
+      </article>
+      <article class="dept-card" data-sig="block">
+        <div class="dept-media"><img class="vskew" src="assets/room-kids.jpg" alt="Kids' footwear department" loading="lazy"></div>
+        <div class="dept-body"><p class="dept-no">Dept. 03</p><h3>Kids</h3>
+          <ul><li>School shoes</li><li>Sneakers &amp; sports</li><li>Sandals &amp; straps</li><li>Party wear</li></ul></div>
+      </article>
+      <article class="dept-card" data-sig="slide">
+        <div class="dept-media"><img class="vskew" src="assets/p-sport.jpg" alt="Sports and school footwear" loading="lazy"></div>
+        <div class="dept-body"><p class="dept-no">Dept. 04</p><h3>Sports &amp; School</h3>
+          <ul><li>Running shoes</li><li>Court sneakers</li><li>School black &amp; white</li><li>Training &amp; walking</li></ul></div>
+      </article>
+      <article class="dept-card" data-sig="flip">
+        <div class="dept-media"><img class="vskew" src="assets/nurse.jpg" alt="Nurse and comfort footwear" loading="lazy"></div>
+        <div class="dept-body"><p class="dept-no">Dept. 05</p><h3>Nurse &amp; Comfort</h3>
+          <ul><li>Nurse whites</li><li>Bellies</li><li>Comfort walkers</li><li>All-day cushioning</li></ul></div>
+      </article>
+      <article class="dept-card" data-sig="diag">
+        <div class="dept-media"><img class="vskew" src="assets/safety.jpg" alt="Industrial safety footwear" loading="lazy"></div>
+        <div class="dept-body"><p class="dept-no">Dept. 06</p><h3>Industrial Safety</h3>
+          <ul><li>Steel-toe shoes</li><li>Work boots</li><li>Anti-skid soles</li><li>Oil-resistant range</li></ul></div>
+      </article>
     </div>
   </section>
 
@@ -156,7 +202,7 @@
       </div>
       <div class="rw-foot">
         <div class="rw-progress"><i id="rwBar"></i></div>
-        <div class="rw-steps" id="rwSteps" aria-hidden="true"></div>
+        <p class="rw-count"><span id="rwPct">0%</span></p>
       </div>
     </div>
   </section>
@@ -279,7 +325,6 @@
           <canvas class="gl-canvas" aria-hidden="true"></canvas>
           <div class="st-shadow"></div>
         </div>
-        <div class="st-steps" id="strideSteps" aria-hidden="true"></div>
         <div class="st-copy">
           <p class="rw-cat">Featured · Men Sports</p>
           <h3>Velocity Street Runner</h3>
@@ -291,10 +336,14 @@
     </div>
   </section>
 
-  <!-- ============ BRANDS — velocity marquee ============ -->
-  <section id="brands" aria-label="Brands in store">
-    <p class="brands-eyebrow">Names along the way — brands on our shelves</p>
-    <div class="mq mq-brands" data-mq="brands"><div class="mq-track"></div></div>
+  <!-- ============ BRAND WALL — typographic grid ============ -->
+  <section id="brandwall" aria-label="Brands in store">
+    <div class="sec-head">
+      <p class="sec-eyebrow">On Our Shelves</p>
+      <h2 class="sec-title" data-split>The Brand Wall</h2>
+      <p class="sec-note">Ten brands Hyderabad already trusts — stocked at Mayuri, Pillar 824.</p>
+    </div>
+    <div class="bw-grid" id="bwGrid"></div>
   </section>
 
   <!-- ============ WHY + VISIT — the night close ============ -->
@@ -304,9 +353,10 @@
         <p class="sec-eyebrow light">End of the walk</p>
         <h2 class="sec-title light" data-split>One Shop, Whole Family</h2>
         <div class="why-points">
-          <div class="why-point"><h3>Every age, every size</h3><p>From a toddler's first school shoe to grandpa's daily walker, sizes and styles for the full family under one roof.</p></div>
-          <div class="why-point"><h3>Work and care ranges</h3><p>Safety shoes for site workers, nurse shoes for hospital staff. Specialist shelves most shops don't stock.</p></div>
-          <div class="why-point"><h3>Honest, moderate prices</h3><p>Branded quality at family prices, with staff who will tell you plainly which pair will last.</p></div>
+          <div class="why-point"><h3>The whole family, one roof</h3><p>From a toddler's first school shoe to grandpa's daily walker — men, women and kids departments together, so one trip fits everyone.</p></div>
+          <div class="why-point"><h3>Safety + nurse speciality</h3><p>A full industrial safety range and a nurse &amp; comfort shelf — specialist stock most footwear shops simply don't keep.</p></div>
+          <div class="why-point"><h3>A landmark everyone knows</h3><p>Main Road, Metro Pillar 824, right by Kukatpally Police Station. If you can find the pillar, you have found us.</p></div>
+          <div class="why-point"><h3>Open all 7 days</h3><p>10:30 AM to 9:30 PM, every single day — Sundays and holidays included. Call ahead and we will keep your size ready.</p></div>
         </div>
       </div>
       <div class="why-media"><img class="vskew" src="assets/store.jpg" alt="Rows of shoes inside a footwear store"></div>
@@ -321,21 +371,31 @@
     <div class="visit-grid">
       <div class="visit-card">
         <h3>The Store</h3>
-        <p>Mayuri Footwears<br>12-6-11/1, Main Road,<br>Near Kukatpally Police Station,<br>Near Metro Pillar 824,<br>Kukatpally, Hyderabad</p>
+        <p>Mayuri Footwears<br>12-6-11/1, Main Road,<br>Near Kukatpally Police Station,<br>Near Metro Pillar 824,<br>Kukatpally, Hyderabad 500072</p>
         <div class="visit-actions">
-          <a class="btn btn-volt" href="https://www.google.com/maps/search/?api=1&amp;query=Mayuri+Foot+Fashions+Kukatpally" target="_blank" rel="noopener"><span>Get Directions</span></a>
+          <a class="btn btn-volt" href="https://www.google.com/maps/dir/?api=1&amp;destination=17.482036,78.414956" target="_blank" rel="noopener"><span>Get Directions</span></a>
           <a class="btn btn-paper" href="tel:+919849000453"><span>Call the Shop</span></a>
+          <a class="btn btn-wa" href="https://wa.me/919849000453" target="_blank" rel="noopener"><span>WhatsApp</span></a>
         </div>
       </div>
       <div class="visit-card">
         <h3>Hours and Phone</h3>
+        <p class="visit-status"><span class="status-dot" data-status-dot></span><strong data-status-text>Checking hours…</strong><span data-status-sub></span></p>
         <table class="hours">
-          <tr><td>Monday – Sunday</td><td>10:30 AM – 9:30 PM</td></tr>
-          <tr><td>Open</td><td>All 7 days</td></tr>
+          <tr><td>Monday</td><td>10:30 AM – 9:30 PM</td></tr>
+          <tr><td>Tuesday</td><td>10:30 AM – 9:30 PM</td></tr>
+          <tr><td>Wednesday</td><td>10:30 AM – 9:30 PM</td></tr>
+          <tr><td>Thursday</td><td>10:30 AM – 9:30 PM</td></tr>
+          <tr><td>Friday</td><td>10:30 AM – 9:30 PM</td></tr>
+          <tr><td>Saturday</td><td>10:30 AM – 9:30 PM</td></tr>
+          <tr><td>Sunday</td><td>10:30 AM – 9:30 PM</td></tr>
         </table>
         <p class="visit-phone"><a href="tel:+919849000453">+91 98490 00453</a></p>
         <p class="sec-note light">On the main road by the metro line. Walk in, or call ahead and we will keep your size ready.</p>
       </div>
+    </div>
+    <div class="map-frame">
+      <iframe title="Map — Mayuri Footwears, Kukatpally" src="https://maps.google.com/maps?q=17.482036,78.414956&amp;z=17&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
     </div>
   </section>
 
@@ -343,7 +403,7 @@
 
 <!-- ============ FOOTER ============ -->
 <footer id="footer">
-  <div class="foot-emblem" id="footEmblem"></div>
+  <div class="foot-mark" aria-hidden="true">M</div>
   <p class="foot-line">Step into comfort, walk in style</p>
   <div class="foot-cols">
     <div><h4>The Walk</h4><a href="#school">06:00 School Run</a><a href="#office">09:00 Office Hours</a><a href="#run">17:00 Run Time</a></div>
@@ -384,12 +444,12 @@
 
 <div id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/lib/gsap.min.js?v=3"></script>
-<script src="js/lib/ScrollTrigger.min.js?v=3"></script>
-<script src="js/lib/lenis.min.js?v=3"></script>
-<script src="js/lib/three.min.js?v=3"></script>
-<script src="js/data.js?v=3"></script>
-<script src="js/gl.js?v=3"></script>
-<script src="js/main.js?v=3"></script>
+<script src="js/lib/gsap.min.js?v=4"></script>
+<script src="js/lib/ScrollTrigger.min.js?v=4"></script>
+<script src="js/lib/lenis.min.js?v=4"></script>
+<script src="js/lib/three.min.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/gl.js?v=4"></script>
+<script src="js/main.js?v=4"></script>
 </body>
 </html>

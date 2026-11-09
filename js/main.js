@@ -11,63 +11,41 @@ var byId = {}; PRODUCTS.forEach(function(p){ byId[p.id]=p; });
 var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ================= EMBLEM (own drawing: footprint + M in a ring) ================= */
-function emblemSVG(cls, dark){
-  var ring = dark ? '#f3ede1' : '#16110b';
-  var acc  = '#ff4d12';
-  return ''+
-  '<svg class="'+(cls||'')+'" viewBox="0 0 200 200" role="img" aria-label="Mayuri Footwears emblem">'+
-    '<circle cx="100" cy="100" r="88" fill="none" stroke="'+ring+'" stroke-width="5"/>'+
-    '<circle cx="100" cy="100" r="78" fill="none" stroke="'+acc+'" stroke-width="2" opacity=".8"/>'+
-    '<g fill="none" stroke="'+acc+'" stroke-width="5" stroke-linejoin="round">'+
-      '<path d="M100 30 C111 32 117 45 115.5 57 C114.2 68 108.5 76 100 76 C91.5 76 85.8 68 84.5 57 C83 45 89 32 100 30 Z"/>'+
-      '<circle cx="82" cy="26" r="3.6"/><circle cx="91.5" cy="20.5" r="4.2"/>'+
-      '<circle cx="102" cy="19.5" r="4.4"/><circle cx="112" cy="22" r="4"/>'+
-      '<circle cx="119.5" cy="28.5" r="3.4"/>'+
-    '</g>'+
-    '<path d="M58 152 L58 104 L84 132 L100 110 L116 132 L142 104 L142 152" fill="none" stroke="'+ring+'" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>'+
-  '</svg>';
-}
-$('#brandEmblem').innerHTML = emblemSVG('hd', false);
-$('#footEmblem').innerHTML  = emblemSVG('ft', true);
+/* ================= BRAND MARK — typographic only (v4) =================
+   Header/footer marks are plain Anton "M" tiles in the HTML. No device,
+   no drawn emblem — the wordmark is the brand. */
 
-function footprintSVG(){
-  return '<svg viewBox="0 0 60 92" aria-hidden="true"><g fill="currentColor">'+
-  '<ellipse cx="15" cy="17" rx="4.6" ry="6" transform="rotate(-18 15 17)"/>'+
-  '<ellipse cx="24.5" cy="9.5" rx="5" ry="6.8" transform="rotate(-6 24.5 9.5)"/>'+
-  '<ellipse cx="34.5" cy="8" rx="5.2" ry="7"/>'+
-  '<ellipse cx="44" cy="10.5" rx="4.8" ry="6.4" transform="rotate(8 44 10.5)"/>'+
-  '<ellipse cx="51.5" cy="17" rx="4.2" ry="5.6" transform="rotate(20 51.5 17)"/>'+
-  '<path d="M30 24 C40 26 45.5 37 44.3 48 C43.2 58.5 37.5 66 30 66 C22.5 66 16.8 58.5 15.7 48 C14.5 37 20 24 30 24 Z"/>'+
-  '<ellipse cx="30" cy="79" rx="9.5" ry="10.5"/>'+
-  '</g></svg>';
+/* ================= LIVE SHOP STATUS (Asia/Kolkata, 10:30–21:30) =================
+   QA override: ?time=HH:MM forces the IST clock for testing both states. */
+function istMinutes(){
+  var q = /[?&]time=(\d{1,2}):(\d{2})/.exec(location.search);
+  if(q) return (+q[1])*60 + (+q[2]);
+  try{
+    var parts = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+    var h=0,m=0;
+    parts.forEach(function(p){ if(p.type==='hour') h=+p.value%24; if(p.type==='minute') m=+p.value; });
+    return h*60+m;
+  }catch(e){
+    var d=new Date(); return d.getHours()*60+d.getMinutes();
+  }
 }
-/* opening footprints: stamp toward the viewer across a starting track */
-var WALK_STEPS=[{x:44,y:4,w:16,r:-7},{x:54,y:14,w:21,r:6},{x:43,y:25,w:27,r:-6},{x:55,y:37,w:34,r:6},{x:42,y:50,w:43,r:-5},{x:56,y:64,w:54,r:5}];
+function paintStatus(){
+  var mins = istMinutes(), OPEN=630, CLOSE=1290;
+  var open = mins>=OPEN && mins<CLOSE;
+  $$('[data-status-dot]').forEach(function(d){ d.classList.toggle('is-open',open); d.classList.toggle('is-closed',!open); });
+  $$('[data-status-text]').forEach(function(t){ t.textContent = open ? 'Open Now' : 'Closed'; });
+  $$('[data-status-sub]').forEach(function(t){ t.textContent = open ? 'Closes 9:30 PM today' : (mins<OPEN ? 'Opens 10:30 AM today' : 'Opens 10:30 AM tomorrow'); });
+  return open;
+}
+paintStatus(); setInterval(paintStatus, 60000);
+window.__mayuriStatus = paintStatus;
+
+/* ================= BRAND WALL (from the one brand list) ================= */
 (function(){
-  var tr=$('#walkTrail'); if(!tr) return;
-  WALK_STEPS.forEach(function(st,i){
-    var d=document.createElement('div'); d.className='step';
-    d.style.left=st.x+'%'; d.style.top=st.y+'%'; d.style.width=st.w+'px';
-    d.style.transform='rotate('+st.r+'deg) scaleX('+(i%2? -1:1)+')';
-    d.innerHTML=footprintSVG();
-    tr.appendChild(d);
-  });
-})();
-/* side progress trail */
-(function(){
-  var t=$('#trail'); if(!t) return;
-  for(var i=0;i<12;i++){ var s=document.createElement('span'); s.className='tstep'; s.innerHTML=footprintSVG(); t.appendChild(s); }
-})();
-/* runway progress footprints */
-(function(){
-  var t=$('#rwSteps'); if(!t) return;
-  for(var i=0;i<5;i++){ var s=document.createElement('span'); s.className='rstep'; s.innerHTML=footprintSVG(); t.appendChild(s); }
-})();
-/* stride footprints */
-(function(){
-  var box=$('#strideSteps'); if(!box) return;
-  for(var i=0;i<6;i++){ var sp=document.createElement('span'); sp.className='sstep'; sp.innerHTML=footprintSVG(); sp.style.transform='rotate(90deg) scaleX('+(i%2?-1:1)+')'; box.appendChild(sp); }
+  var g=$('#bwGrid'); if(!g) return;
+  g.innerHTML = (window.MAYURI_BRANDS||[]).map(function(b,i){
+    return '<div class="bw-cell"><span class="bw-no">'+String(i+1).padStart(2,'0')+'</span><span class="bw-name">'+b+'</span></div>';
+  }).join('');
 })();
 
 /* ================= STORE (localStorage) ================= */
@@ -280,18 +258,7 @@ if(fine && !reduced && window.gsap){
 var GL = { hero:null, stride:null };
 try{ if(window.MayuriGL) GL = window.MayuriGL.init() || GL; }catch(e){}
 
-/* hero stage mouse */
-if(fine){
-  var hs=$('#glHero');
-  if(hs){
-    hs.addEventListener('pointermove',function(e){
-      var r=hs.getBoundingClientRect();
-      var x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-      if(GL.hero) GL.hero.setMouse(x,-y);
-    });
-    hs.setAttribute('data-cursor','VIEW');
-  }
-}
+/* (v4: hero is a full-bleed photographic stage — no GL hero stage) */
 
 /* ================= KINETIC TYPE: char splitter ================= */
 function splitChars(el){
@@ -317,7 +284,6 @@ function buildMarquee(el, items){
   marquees.push(st);
 }
 buildMarquee($('.band .mq'), ['Step into comfort','Walk in style','Step into comfort','Walk in style']);
-buildMarquee($('.mq-brands'), (window.MAYURI_BRANDS||[]).concat(window.MAYURI_BRANDS||[]));
 
 /* ================= VELOCITY HUB =================
    One signed velocity value feeds: marquee speed, image skew/stretch,
@@ -336,7 +302,7 @@ try{ seenIntro = !!sessionStorage.getItem('mayuri.intro'); }catch(e){}
 function markSeen(){ try{ sessionStorage.setItem('mayuri.intro','1'); }catch(e){} }
 function finalStates(){
   document.body.classList.remove('is-loading');
-  var w=$('#walk'); if(w) w.style.display='none';
+  var w=$('#intro'); if(w) w.style.display='none';
 }
 
 function initScrollFX(){
@@ -345,15 +311,7 @@ function initScrollFX(){
   if(window.__lenis) window.__lenis.on('scroll', function(e){ if(e && typeof e.velocity==='number') feedVelocity(e.velocity * 60); });
 
   gsap.to('#progress',{scaleX:1,ease:'none',scrollTrigger:{start:0,end:'max',scrub:.3}});
-  /* footprint trail + trail contrast on dark scenes */
-  var tsteps=$$('#trail .tstep');
-  ScrollTrigger.create({ start:0, end:'max', onUpdate:function(st){
-    var lit=Math.round(st.progress*tsteps.length);
-    tsteps.forEach(function(s,i){ s.classList.toggle('lit', i<lit); });
-    feedVelocity(st.getVelocity());
-  }});
-  ScrollTrigger.create({ trigger:'#why', start:'top 60%', end:'bottom top',
-    onToggle:function(st){ $('#trail').classList.toggle('on-dark', st.isActive); } });
+  ScrollTrigger.create({ start:0, end:'max', onUpdate:function(st){ feedVelocity(st.getVelocity()); } });
 
   /* ambient day-grade: one tint film, dawn -> noon -> gold -> dusk -> night */
   gsap.timeline({ scrollTrigger:{ trigger:'#top', start:'top top', end:'bottom bottom', scrub:.6 } })
@@ -364,9 +322,54 @@ function initScrollFX(){
     .to('#grade',{backgroundColor:'rgba(90,40,120,0.15)',duration:1,ease:'none'},4)
     .to('#grade',{backgroundColor:'rgba(8,8,30,0.22)',duration:1,ease:'none'},5);
 
-  /* hero backdrop word drifts against the scroll */
-  gsap.fromTo('.hero-word',{xPercent:4},{xPercent:-7,ease:'none',
+  /* hero photographic stage drifts slower than the page (cinematic depth) */
+  gsap.fromTo('.hero-bg',{yPercent:-6},{yPercent:6,ease:'none',
     scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:.5}});
+  gsap.fromTo('.hero-inner',{yPercent:0,opacity:1},{yPercent:-10,opacity:.25,ease:'none',
+    scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:.5}});
+
+  /* ---- INSIDE MAYURI: interior parallax + fact counters ---- */
+  gsap.fromTo('#insideImg',{yPercent:-10},{yPercent:10,ease:'none',
+    scrollTrigger:{trigger:'#inside',start:'top bottom',end:'bottom top',scrub:.6}});
+  $$('#inside [data-count]').forEach(function(el){
+    var end=+el.getAttribute('data-count'), obj={v:0};
+    gsap.to(obj,{v:end,duration:1.2,ease:'power2.out',
+      scrollTrigger:{trigger:'#inside',start:'top 62%',toggleActions:'play none none reverse'},
+      onUpdate:function(){ el.textContent=Math.round(obj.v); }});
+  });
+
+  /* ---- DEPARTMENTS: each card its own signature (wipe/mask/block/slide/flip/diag) ---- */
+  $$('.dept-card').forEach(function(card){
+    var sig=card.getAttribute('data-sig'), media=card.querySelector('.dept-media'), body=card.querySelector('.dept-body');
+    var st={trigger:card,start:'top 82%',toggleActions:'play none none reverse'};
+    if(sig==='wipe'){
+      gsap.fromTo(media,{clipPath:'inset(0 0 100% 0)'},{clipPath:'inset(0 0 0% 0)',duration:1.1,ease:'power4.inOut',scrollTrigger:st});
+      gsap.fromTo(body,{y:40,opacity:0},{y:0,opacity:1,duration:.7,ease:'power3.out',scrollTrigger:st});
+    } else if(sig==='mask'){
+      gsap.fromTo(media,{clipPath:'circle(8% at 50% 50%)'},{clipPath:'circle(75% at 50% 50%)',duration:1.15,ease:'power3.inOut',scrollTrigger:st});
+      gsap.fromTo(body,{y:40,opacity:0},{y:0,opacity:1,duration:.7,ease:'power3.out',scrollTrigger:st});
+    } else if(sig==='block'){
+      var cov=document.createElement('div'); cov.className='dept-cover'; media.appendChild(cov);
+      var tl=gsap.timeline({scrollTrigger:st});
+      tl.to(cov,{scaleX:1,duration:.45,ease:'power4.in'})
+        .fromTo(media.querySelector('img'),{opacity:0},{opacity:1,duration:.08})
+        .set(cov,{transformOrigin:'100% 50%'})
+        .to(cov,{scaleX:0,duration:.55,ease:'power4.out'})
+        .fromTo(body,{y:40,opacity:0},{y:0,opacity:1,duration:.6,ease:'power3.out'},'-=.3');
+      gsap.set(media.querySelector('img'),{opacity:0});
+    } else if(sig==='slide'){
+      gsap.fromTo(card,{x:120,opacity:0},{x:0,opacity:1,duration:.9,ease:'power4.out',scrollTrigger:st});
+    } else if(sig==='flip'){
+      gsap.fromTo(card,{rotateX:-64,y:60,opacity:0,transformPerspective:900},{rotateX:0,y:0,opacity:1,duration:.9,ease:'power3.out',scrollTrigger:st});
+    } else if(sig==='diag'){
+      gsap.fromTo(media,{clipPath:'polygon(0 0, 52% 0, 36% 100%, 0 100%)'},{clipPath:'polygon(0 0, 100% 0, 100% 100%, 0 100%)',duration:1,ease:'power3.inOut',scrollTrigger:st});
+      gsap.fromTo(body,{y:40,opacity:0},{y:0,opacity:1,duration:.7,ease:'power3.out',scrollTrigger:st});
+    }
+  });
+
+  /* ---- BRAND WALL: cells stagger in, numerals first ---- */
+  gsap.fromTo('.bw-cell',{y:44,opacity:0},{y:0,opacity:1,duration:.65,ease:'power3.out',stagger:.055,
+    scrollTrigger:{trigger:'#brandwall',start:'top 76%',toggleActions:'play none none reverse'}});
 
   /* ---- kinetic headlines: chars rotate up, per section ---- */
   $$('.sec-title[data-split]').forEach(function(t){
@@ -455,25 +458,21 @@ function initScrollFX(){
   mm.add('(min-width: 861px)', function(){
     var track=$('#rwTrack'), view=$('.rw-view');
     function dist(){ return Math.max(0, track.scrollWidth - view.clientWidth + window.innerWidth*0.052); }
-    var rsteps=$$('#rwSteps .rstep');
     gsap.to(track,{x:function(){ return -dist(); },ease:'none',
       scrollTrigger:{ trigger:'#runway', start:'top top', end:function(){ return '+='+dist(); },
         scrub:.5, pin:true, anticipatePin:1, invalidateOnRefresh:true,
         onUpdate:function(st){
           gsap.set('#rwBar',{scaleX:st.progress});
-          var lit=Math.round(st.progress*rsteps.length);
-          rsteps.forEach(function(s,i){ s.classList.toggle('lit', i<lit); });
+          var pct=$('#rwPct'); if(pct) pct.textContent=Math.round(st.progress*100)+'%';
         } }});
     return function(){ gsap.set(track,{x:0}); };
   });
 
   /* ---- THE STRIDE: pinned WebGL dissolve (desktop), scroll-scrubbed (mobile) ---- */
-  var ssteps=$$('#strideSteps .sstep');
   function setStride(p){
     gsap.set('#stBar',{scaleX:p});
     var beat=Math.min(3, Math.floor(p*3)+1);
     $('#rwNow').textContent='Stride '+beat;
-    ssteps.forEach(function(sp,i){ sp.classList.toggle('lit', i < Math.round(p*6)); });
     if(GL.stride && GL.stride.isLive()){ GL.stride.setMix(p*2); }
     else {
       var idx=Math.min(2, Math.floor(p*3));
@@ -536,33 +535,28 @@ function initLenis(){
   });
 }
 
-/* ================= OPENING: the first step (starting-line cut) ================= */
-function playWalk(){
+/* ================= OPENING v4: a clean brand wipe (no devices) ================= */
+function playIntro(){
   if(!window.gsap || reduced || seenIntro){ finalStates(); initLenis(); initScrollFX(); heroIn(true); return; }
-  gsap.set('.hero-title .ch',{rotateX:96,yPercent:55,opacity:0});
-  gsap.set('#walk',{clipPath:'inset(0 0 0% 0)'});
+  gsap.set('.hero-mark .ch',{rotateX:96,yPercent:55,opacity:0});
   var done=false;
   function finish(){ if(done) return; done=true; markSeen(); finalStates(); initLenis(); initScrollFX(); }
   var tl=gsap.timeline({ defaults:{ease:'power3.out'}, onComplete:finish });
-  tl.fromTo('.walk-track .step',{opacity:0,scale:1.5},{opacity:.95,scale:1,duration:.32,ease:'power4.in',stagger:.24},.3)
-    .fromTo('#walkShoe',{opacity:0,y:96,rotate:-9,scale:.85},{opacity:1,y:0,rotate:-2.5,scale:1,duration:.8,ease:'back.out(1.4)'},1.9)
-    .to('.walk-kicker',{opacity:1,duration:.5},2.5)
-    .fromTo('.walk-name',{opacity:0,scale:1.3,y:26},{opacity:1,scale:1,y:0,duration:.7,ease:'power4.out'},2.65)
-    .to('.walk-sub',{opacity:1,duration:.5},3.1)
-    .to('.walk-skip',{opacity:1,duration:.4},3.2)
-    .to('#walk',{clipPath:'inset(0 0 100% 0)',duration:.9,ease:'power4.inOut'},4.15)
-    .add(function(){ heroIn(false); },4.45);
-  $('#walk').addEventListener('click',function(){ tl.progress(1); });
+  tl.fromTo('.intro-word',{opacity:0,scale:1.24,letterSpacing:'.3em'},{opacity:1,scale:1,letterSpacing:'.06em',duration:.75,ease:'power4.out'},.15)
+    .to('.intro-sub',{opacity:1,duration:.45},.8)
+    .to('#intro',{clipPath:'inset(0 0 100% 0)',duration:.85,ease:'power4.inOut'},1.55)
+    .add(function(){ heroIn(false); },1.8);
+  $('#intro').addEventListener('click',function(){ tl.progress(1); });
   setTimeout(function(){ if(document.body.classList.contains('is-loading')){ tl.kill(); heroIn(true); finish(); } },7000);
 }
 function heroIn(instant){
   if(!window.gsap) return;
-  var chars=$$('.hero-title .ch');
+  var chars=$$('.hero-mark .ch');
   if(instant){ gsap.set(chars,{rotateX:0,yPercent:0,opacity:1}); return; }
-  gsap.to(chars,{rotateX:0,yPercent:0,opacity:1,duration:.85,ease:'power4.out',stagger:.02});
+  gsap.to(chars,{rotateX:0,yPercent:0,opacity:1,duration:.85,ease:'power4.out',stagger:.035});
 }
 
-if(document.readyState==='complete') playWalk();
-else addEventListener('load',function(){ setTimeout(playWalk,60); });
+if(document.readyState==='complete') playIntro();
+else addEventListener('load',function(){ setTimeout(playIntro,60); });
 setTimeout(function(){ if(document.body.classList.contains('is-loading') && !window.gsap){ finalStates(); } },5000);
 })();
