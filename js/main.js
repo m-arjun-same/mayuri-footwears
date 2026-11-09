@@ -328,16 +328,6 @@ function initScrollFX(){
   gsap.fromTo('.hero-inner',{yPercent:0,opacity:1},{yPercent:-10,opacity:.25,ease:'none',
     scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:.5}});
 
-  /* ---- INSIDE MAYURI: interior parallax + fact counters ---- */
-  gsap.fromTo('#insideImg',{yPercent:-10},{yPercent:10,ease:'none',
-    scrollTrigger:{trigger:'#inside',start:'top bottom',end:'bottom top',scrub:.6}});
-  $$('#inside [data-count]').forEach(function(el){
-    var end=+el.getAttribute('data-count'), obj={v:0};
-    gsap.to(obj,{v:end,duration:1.2,ease:'power2.out',
-      scrollTrigger:{trigger:'#inside',start:'top 62%',toggleActions:'play none none reverse'},
-      onUpdate:function(){ el.textContent=Math.round(obj.v); }});
-  });
-
   /* ---- DEPARTMENTS: each card its own signature (wipe/mask/block/slide/flip/diag) ---- */
   $$('.dept-card').forEach(function(card){
     var sig=card.getAttribute('data-sig'), media=card.querySelector('.dept-media'), body=card.querySelector('.dept-body');
@@ -436,12 +426,6 @@ function initScrollFX(){
     scrollTrigger:{trigger:'#gridEvening',start:T,toggleActions:TA}});
   gsap.fromTo('#evening .best-band',{x:-90,opacity:0},{x:0,opacity:1,duration:.9,ease:'power3.out',
     scrollTrigger:{trigger:'#evening .best-band',start:'top 88%',toggleActions:TA}});
-  // SAFETY: diagonal clip wipes open with scroll (scrubbed, not timed)
-  gsap.fromTo('#safety .safety-bg',{clipPath:'polygon(0 0, 58% 0, 42% 100%, 0 100%)'},
-    {clipPath:'polygon(0 0, 100% 0, 100% 100%, 0 100%)',ease:'none',
-     scrollTrigger:{trigger:'#safety',start:'top 96%',end:'top 30%',scrub:.5}});
-  gsap.fromTo('#safety .chips span',{scale:.4,opacity:0},{scale:1,opacity:1,duration:.5,ease:'back.out(2.2)',stagger:.07,
-    scrollTrigger:{trigger:'#safety',start:T,toggleActions:TA}});
   // CLOSE: why points slide from the left edge; visit cards counter-slide
   gsap.fromTo('.why-point',{x:-56,opacity:0},{x:0,opacity:1,duration:.75,ease:'power3.out',stagger:.12,
     scrollTrigger:{trigger:'#why',start:'top 72%',toggleActions:TA}});
